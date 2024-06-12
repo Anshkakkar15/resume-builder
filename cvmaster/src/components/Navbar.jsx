@@ -6,7 +6,7 @@ import { User2 } from "lucide-react";
 export const Navbar = () => {
   return (
     <div className="shadow-md bg-white  w-full">
-      <div className="container mx-auto py-3 px-0">
+      <div className="container mx-auto py-3 ">
         <div className="flex justify-between items-center">
           <div className="">
             <Image src={ASSETS.LOGO} alt="logo" />

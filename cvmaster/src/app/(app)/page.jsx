@@ -5,7 +5,7 @@ import { ASSETS } from "../../../assets";
 export default function Home() {
   return (
     <div className="bg-light-blue">
-      <div className="container mx-auto py-14 px-0">
+      <div className="container mx-auto py-14 ">
         <div className="grid grid-cols-2 items-center">
           <div className="flex flex-col gap-y-6">
             <h1 className="font-semibold font-popins text-dark-blue text-6xl leading-[65px]">
