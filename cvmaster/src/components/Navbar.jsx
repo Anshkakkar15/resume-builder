@@ -5,25 +5,25 @@ import { User2 } from "lucide-react";
 
 export const Navbar = () => {
   return (
-    <div className="shadow-md bg-white  w-full">
-      <div className="container mx-auto py-3 ">
-        <div className="flex justify-between items-center">
-          <div className="">
+    <div className="w-full bg-white shadow-md">
+      <div className="container mx-auto px-3 py-3 sm:px-5 sm:py-4 md:px-7 lg:px-8">
+        <div className="flex items-center justify-between">
+          <div className="max-w-28 sm:max-w-32 2xl:w-full">
             <Image src={ASSETS.LOGO} alt="logo" />
           </div>
           <div>
-            <ul className="flex gap-9">
+            <ul className="flex gap-2 sm:gap-5 md:gap-7 xl:gap-9">
               <li>
                 <a
-                  href="#template"
-                  className="font-medium text-xl text-dark-blue font-popins"
+                  href="#templates"
+                  className="text-nowrap font-popins text-sm font-medium text-dark-blue sm:text-base 2xl:text-lg"
                 >
                   Craft Your Resume
                 </a>
               </li>
               <li>
                 <Link
-                  className="flex gap-2 items-center font-medium text-xl text-dark-blue font-popins"
+                  className="flex items-center gap-1 font-popins text-sm font-medium text-dark-blue sm:gap-2 sm:text-base 2xl:text-lg"
                   href="/login"
                 >
                   <span>

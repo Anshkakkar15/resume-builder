@@ -77,3 +77,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+.ssklk {
+  background-image: url("../../assets/image/home_bg.png");
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
