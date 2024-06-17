@@ -87,3 +87,22 @@ body {
   scroll-behavior: smooth;
   scroll-padding-top: 100px;
 }
+
+input,
+select {
+  border-color: #0D1F2D !important;
+}
+
+label {
+  color: #0D1F2D !important;
+}
+
+input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+select:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}

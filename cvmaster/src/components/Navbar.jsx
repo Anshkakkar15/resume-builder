@@ -24,7 +24,7 @@ export const Navbar = () => {
               <li>
                 <Link
                   className="flex items-center gap-1 font-popins text-sm font-medium text-dark-blue sm:gap-2 sm:text-base 2xl:text-lg"
-                  href="/login"
+                  href="/sign-in"
                 >
                   <span>
                     <User2 />

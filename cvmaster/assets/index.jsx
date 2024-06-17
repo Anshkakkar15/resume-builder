@@ -13,4 +13,5 @@ export const ASSETS = {
   RESUME_TEMPLATE_5: require("./image/template5.png"),
   BLUE_BG: "./image/home_bg.png",
   CONTACT_IMG: "./image/contact_img.png",
+  AUTH_IMG: require("./image/auth_img.png"),
 };
