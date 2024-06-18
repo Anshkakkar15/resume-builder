@@ -19,7 +19,7 @@ export default function Home() {
           {/* hero section */}
           <div className="grid grid-cols-1 items-center gap-x-5 gap-y-9 sm:grid-cols-2">
             <div className="mx-auto flex max-w-[450px] flex-col gap-y-3 sm:max-w-full xl:gap-y-6">
-              <h1 className="font-popins text-lg font-semibold leading-7 text-dark-blue md:text-xl lg:text-2xl xl:text-3xl 2xl:text-5xl 2xl:leading-[65px]">
+              <h1 className="font-popins text-xl font-semibold leading-7 text-dark-blue md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl 2xl:leading-[65px]">
                 Craft Your Perfect Resume in Minutes!
               </h1>
               <p className="font-popins text-sm leading-6 text-dark-blue md:text-base xl:text-lg xl:leading-9 2xl:text-xl">
