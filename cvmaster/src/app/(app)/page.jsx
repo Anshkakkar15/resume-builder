@@ -22,7 +22,7 @@ export default function Home() {
               <h1 className="font-popins text-lg font-semibold leading-7 text-dark-blue md:text-xl lg:text-2xl xl:text-3xl 2xl:text-5xl 2xl:leading-[65px]">
                 Craft Your Perfect Resume in Minutes!
               </h1>
-              <p className="font-popins text-sm font-medium leading-6 text-dark-blue md:text-base xl:text-lg xl:leading-9 2xl:text-xl">
+              <p className="font-popins text-sm leading-6 text-dark-blue md:text-base xl:text-lg xl:leading-9 2xl:text-xl">
                 Create a professional resume effortlessly with our innovative
                 builder. Customize templates, highlight your achievements, and
                 land your dream job
