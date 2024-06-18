@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { signUpSchema } from "@/schemas/authSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { animated, useSpring } from "@react-spring/web";
 
 export default function SignUp() {
   const form = useForm({
@@ -27,25 +26,12 @@ export default function SignUp() {
     },
   });
 
-  const [props, api] = useSpring(
-    () => ({
-      from: { opacity: 0 },
-      to: { opacity: 1 },
-      leave: { opacity: 0 },
-      config: { duration: 1000 },
-    }),
-    [],
-  );
-
   const onSubmit = (data) => {
     console.log(data);
   };
 
   return (
-    <animated.div
-      style={props}
-      className="container mx-auto px-3 py-3 sm:px-5 sm:py-4 md:px-7 lg:px-8"
-    >
+    <div className="container mx-auto px-3 py-3 sm:px-5 sm:py-4 md:px-7 lg:px-8">
       <div className="max-w-28 sm:max-w-32 2xl:w-full">
         <Link href="/">
           <Image src={ASSETS.LOGO} alt="logo" />
@@ -113,6 +99,6 @@ export default function SignUp() {
           </p>
         </div>
       </div>
-    </animated.div>
+    </div>
   );
 }
