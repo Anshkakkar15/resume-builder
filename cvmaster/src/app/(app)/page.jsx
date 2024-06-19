@@ -66,7 +66,7 @@ export default function Home() {
             <CarouselContent>
               {resumeTemplates?.length >= 1 &&
                 resumeTemplates?.map((temlates) => (
-                  <TemplateCard temlates={temlates} />
+                  <TemplateCard temlates={temlates} key={temlates?.id} />
                 ))}
             </CarouselContent>
           </Carousel>
