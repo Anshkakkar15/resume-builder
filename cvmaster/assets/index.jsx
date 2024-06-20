@@ -1,7 +1,8 @@
 import logo from "./image/logo.svg";
-
+import icon from "./image/icon.svg";
 export const ASSETS = {
   LOGO: logo,
+  ICON: icon,
   HERO_RESUME: require("./image/hero_resume.png"),
   STEP_IMG_1: require("./image/step_img_1.png"),
   STEP_IMG_2: require("./image/step_img_2.png"),
@@ -11,6 +12,7 @@ export const ASSETS = {
   RESUME_TEMPLATE_3: require("./image/template3.png"),
   RESUME_TEMPLATE_4: require("./image/template4.png"),
   RESUME_TEMPLATE_5: require("./image/template5.png"),
+  RESUME_TEMPLATE_6: require("./image/template6.png"),
   BLUE_BG: "./image/home_bg.png",
   CONTACT_IMG: "./image/contact_img.png",
   AUTH_IMG: require("./image/auth_img.png"),
