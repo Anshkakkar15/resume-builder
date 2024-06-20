@@ -1,4 +1,4 @@
-import { ResumeIds } from "@/constants/ResumeId";
+import { ResumeIds } from "../src/constants/ResumeId";
 import { ASSETS } from "../assets";
 
 export const StepDetails = [

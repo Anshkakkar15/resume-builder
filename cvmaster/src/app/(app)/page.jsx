@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -19,11 +18,11 @@ export default function Home() {
   return (
     <AnimatePresence>
       <motion.div
-      // initial={{ opacity: 0, translateY: -10 }}
-      // animate={{ opacity: 1, translateY: 0 }}
-      // exit={{ opacity: 0, translateY: -10 }}
-      // transition={{ ease: "easeInOut", duration: 0.5 }}
-      // layout
+        initial={{ opacity: 0, translateY: -10 }}
+        animate={{ opacity: 1, translateY: 0 }}
+        exit={{ opacity: 0, translateY: -10 }}
+        transition={{ ease: "easeInOut", duration: 0.5 }}
+        layout
       >
         <div className="bg-light-blue">
           <div className="container mx-auto px-3 py-5 sm:px-5 sm:py-7 md:px-7 md:py-9 lg:px-8 xl:px-11 2xl:py-14">
