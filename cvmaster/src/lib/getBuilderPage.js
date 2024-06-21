@@ -3,6 +3,7 @@ export const nextStep = (pageName) => {
   if (!currentPage?.includes(pageName)) {
     currentPage.push(pageName);
   }
+
   sessionStorage.setItem("builder-page", JSON.stringify(currentPage));
 };
 
@@ -11,9 +12,10 @@ export const backStep = (pageName) => {
   const newData = currentPage?.filter(
     (elm) => elm?.toLowerCase() !== pageName?.toLowerCase(),
   );
-  sessionStorage.setItem("builder-page", JSON.stringify(newData));
+  typeof window !== "undefined" &&
+    sessionStorage.setItem("builder-page", JSON.stringify(newData));
 };
 
 export const emptySteps = () => {
-  sessionStorage.setItem("builder-page", JSON.stringify([]));
+  typeof window !== "undefined" && sessionStorage.clear();
 };

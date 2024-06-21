@@ -15,12 +15,12 @@ export const TemplateCard = ({ temlates }) => {
   return (
     <CarouselItem
       key={temlates.id}
-      className="md:basis-1/3.5 basis-1/2 sm:basis-1/3 md:basis-1/4"
+      className="md:basis-1/3.5 basis-1/2 p-2 sm:basis-1/3 md:basis-1/4"
     >
       <div
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className={`relative shadow-md shadow-black ${isHovered ? "tempelate-overlay" : ""}`}
+        className={`relative rounded-xl border-[15px] border-dark-blue shadow-md shadow-black ${isHovered ? "tempelate-overlay" : ""}`}
       >
         <Image src={temlates.image} alt="resumes" className={`h-full w-full`} />
         <div className="absolute left-[50%] top-[50%] z-10 -translate-x-2/4 -translate-y-2/4">

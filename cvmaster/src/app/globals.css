@@ -121,3 +121,31 @@ select:focus-visible {
   bottom: 0;
   z-index: 2;
 }
+
+.vertical-timeline::before {
+  left: 9px !important;
+  width: 2px !important;
+  height: 85% !important;
+  top: 8% !important;
+}
+.template1_line_color.vertical-timeline::before {
+  background: #664b10 !important;
+}
+
+.vertical-timeline-element-content {
+  position: relative !important;
+  margin-left: 33px !important;
+  background: #fff !important;
+  border-radius: none !important;
+  padding: 0px 8px 10px 7px !important;
+  box-shadow: none !important;
+  border-radius: none !important;
+}
+
+.vertical-timeline-element {
+  margin: 0 !important;
+}
+
+.vertical-timeline {
+  padding: 0 !important;
+}

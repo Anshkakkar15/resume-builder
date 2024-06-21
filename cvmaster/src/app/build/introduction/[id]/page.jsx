@@ -28,6 +28,3 @@ export default function Introduction() {
     </>
   );
 }
-{
-  /* <button onClick={addLanguage}>Next</button> */
-}
