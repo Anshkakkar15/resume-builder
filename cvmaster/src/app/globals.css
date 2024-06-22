@@ -107,8 +107,6 @@ select:focus-visible {
   box-shadow: none !important;
 }
 
-<<<<<<< HEAD
-=======
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -121,7 +119,6 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
->>>>>>> a4ade07feb9590374013382c9f824a4e5947e3e0
 .tempelate-overlay {
   position: relative;
 }
@@ -143,6 +140,7 @@ input[type="number"] {
   height: 85% !important;
   top: 8% !important;
 }
+
 .template1_line_color.vertical-timeline::before {
   background: #664b10 !important;
 }

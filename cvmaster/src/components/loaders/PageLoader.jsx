@@ -9,11 +9,7 @@ export const PageLoader = () => {
         className="flex items-center space-x-2"
       >
         <svg
-<<<<<<< HEAD
-          class="h-20 w-20 animate-spin stroke-dark-blue"
-=======
           className="h-20 w-20 animate-spin stroke-dark-blue"
->>>>>>> a4ade07feb9590374013382c9f824a4e5947e3e0
           viewBox="0 0 256 256"
         >
           <line
