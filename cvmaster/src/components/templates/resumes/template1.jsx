@@ -7,11 +7,18 @@ import {
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
+<<<<<<< HEAD
 import { ResumeIds } from "@/constants/ResumeId";
 
 export const Template1 = () => {
   return (
     <div id={ResumeIds.ID_1} className="bg-white p-5 shadow-xl">
+=======
+
+export const Template1 = () => {
+  return (
+    <div className="bg-white p-5 shadow-xl">
+>>>>>>> a4ade07feb9590374013382c9f824a4e5947e3e0
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-y-2">
           <h1 className="font-popins text-3xl font-bold italic text-[#664b10]">
