@@ -34,7 +34,7 @@ export default function Introduction() {
   });
 
   useImperativeHandle(formRef, () => ({
-    submit: form.handleSubmit(addLanguage),
+    submit: form.handleSubmit(handleAddIntroduction),
   }));
 
   const handleContinue = () => {
@@ -43,10 +43,10 @@ export default function Introduction() {
     }
   };
 
-  const addLanguage = (data) => {
+  const handleAddIntroduction = (data) => {
     console.log(data);
-    router.push(`/build/download/${resumeId}`);
-    // nextStep("language");
+    router.push(`/build/summary/${resumeId}`);
+    nextStep("summary");
   };
 
   return (

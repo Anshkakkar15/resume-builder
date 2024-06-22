@@ -89,7 +89,8 @@ body {
 }
 
 input,
-select {
+select,
+textarea {
   border-color: #0d1f2d !important;
 }
 
@@ -103,6 +104,11 @@ input:focus-visible {
 }
 
 select:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+textarea:focus-visible {
   outline: none !important;
   box-shadow: none !important;
 }
