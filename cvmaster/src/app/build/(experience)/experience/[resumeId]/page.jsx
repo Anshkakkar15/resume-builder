@@ -1,12 +1,13 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { BuilderLayout } from "@/components/BuilderLayout";
 import { useForm } from "react-hook-form";
-import { useImperativeHandle, useRef, useState } from "react";
+import { useImperativeHandle, useRef, useState, useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
@@ -14,13 +15,21 @@ import {
 } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
-import { CustomDatePicker } from "@/components/DatePicker";
+import { DatePicker } from "@/components/DatePicker";
 import { TextEditor } from "@/components/TextEditor";
+import { experienceSchema } from "@/schemas/experinceSchema";
+import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils";
 
 export default function Experience() {
   const { resumeId } = useParams();
   const formRef = useRef();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const expid = searchParams.get("expid");
+  console.log(atob(expid));
+
+  const [isChecked, setIsChecked] = useState(false);
 
   const form = useForm({
     defaultValues: {
@@ -31,9 +40,15 @@ export default function Experience() {
       startDate: "",
       endDate: "",
       responsibilities: "",
+      present: false,
     },
-    // resolver: yupResolver(),
+    resolver: yupResolver(experienceSchema),
   });
+
+  useEffect(() => {
+    // Update the endDate field when the checkbox state changes
+    form.setValue("endDate", isChecked ? "" : form.getValues("endDate"));
+  }, [isChecked, form]);
 
   useImperativeHandle(formRef, () => ({
     submit: form.handleSubmit(handleAddExperience),
@@ -47,6 +62,7 @@ export default function Experience() {
 
   const handleAddExperience = (data) => {
     console.log(data);
+    router.push(`/build/experience?id=${btoa(resumeId)}`);
   };
 
   return (
@@ -121,7 +137,7 @@ export default function Experience() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>START DATE</FormLabel>
-                    <CustomDatePicker />
+                    <DatePicker date={field.value} onChange={field.onChange} />
                     <FormMessage />
                   </FormItem>
                 )}
@@ -134,19 +150,46 @@ export default function Experience() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>END DATE</FormLabel>
-                    <CustomDatePicker />
+                    <DatePicker
+                      date={field.value}
+                      onChange={field.onChange}
+                      shouldOpen={!isChecked}
+                    />
                     <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="present"
+                render={({ field }) => (
+                  <FormItem className={cn("mt-5 flex items-center gap-3")}>
+                    <FormControl>
+                      <Checkbox
+                        checked={isChecked}
+                        onCheckedChange={(checked) => {
+                          setIsChecked(checked);
+                          field.onChange(checked);
+                        }}
+                      />
+                    </FormControl>
+                    <FormLabel className="!mt-0">Present</FormLabel>
                   </FormItem>
                 )}
               />
             </div>
           </div>
           <div className="mt-3">
-            <FormLabel className="mb-2">RESPONSIBILITIES</FormLabel>
-            <TextEditor
-              name="responsibilities"
+            <FormField
               control={form.control}
-              defaultValue={"gelo"}
+              name="responsibilities"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>RESPONSIBILITIES</FormLabel>
+                  <TextEditor onChange={field.onChange} defaultValue={""} />
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
         </form>
