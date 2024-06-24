@@ -168,3 +168,24 @@ input[type="number"] {
 .vertical-timeline {
   padding: 0 !important;
 }
+.tox-menubar,
+.tox-statusbar {
+  display: none !important;
+}
+
+.tox-toolbar__primary {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  justify-content: flex-end !important;
+}
+
+.tox-tinymce {
+  border: 1px solid #0d1f2d !important;
+}
+
+.tox-editor-header {
+  box-shadow: none !important;
+}
+.tox .tox-edit-area::before {
+  border: none !important;
+}

@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { backStep } from "@/lib/getBuilderPage";
+import { backStep, nextStep } from "@/lib/getBuilderPage";
 import { languageAndSkillSchema } from "@/schemas/languageAndSkillSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Plus, X } from "lucide-react";
@@ -45,8 +45,8 @@ export default function Language() {
 
   const handleAddLanguage = (data) => {
     console.log(data);
-    // router.push(`/build/summary/${resumeId}`);
-    // nextStep("summary");
+    router.push(`/build/experience/${resumeId}`);
+    nextStep("experience");
   };
 
   return (

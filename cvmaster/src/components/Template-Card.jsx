@@ -20,7 +20,7 @@ export const TemplateCard = ({ temlates }) => {
       <div
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className={`relative rounded-xl border-[15px] border-dark-blue shadow-md shadow-black ${isHovered ? "tempelate-overlay" : ""}`}
+        className={`relative border-[5px] border-dark-blue shadow-md shadow-black md:border-[9px] lg:border-[12px] 2xl:border-[15px] ${isHovered ? "tempelate-overlay" : ""}`}
       >
         <Image src={temlates.image} alt="resumes" className={`h-full w-full`} />
         <div className="absolute left-[50%] top-[50%] z-10 -translate-x-2/4 -translate-y-2/4">
