@@ -1,28 +1,31 @@
 "use client";
 
 import { BuilderLayout } from "@/components/BuilderLayout";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil, Plus, Trash } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function Experience() {
+export default function education() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const resumeId = searchParams.get("id");
 
   const handleEditExperience = (id) => {
-    router.push(`/build/experience/${atob(resumeId)}?expid=${btoa(id)}`);
+    router.push(`/build/education/${resumeId}?edu=${id}`);
   };
 
   return (
     <BuilderLayout
-      heading={"Review your experience"}
-      handleBack={() => router.push(`/build/experience/${atob(resumeId)}`)}
+      heading="Education Summary"
+      handleBack={() => {
+        router.push(`/build/education/${resumeId}`);
+      }}
+      handl
     >
       <div className="rounded-md border-2 border-[#F9FAFB] bg-[#F9FAFB] p-5">
         <div className="flex flex-col gap-y-3">
           <div className="flex items-center justify-between">
             <h3 className="font-popins text-base font-semibold text-dark-blue">
-              Coderzbars | React Developer
+              Ips | 12th
             </h3>
             <div className="flex items-center gap-3">
               <span
@@ -39,21 +42,13 @@ export default function Experience() {
           <p className="font-popins text-sm text-dark-blue">
             Mohali India | April 2023 - Present
           </p>
-          <ul className="ml-5 list-disc">
-            <li className="font-popins text-sm text-dark-blue">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dicta
-              doloribus laborum quo, inventore optio nostrum, porro dolor quis
-              explicabo magnam minus magni cumque quia dignissimos illo dolorem
-              expedita nihil aliquid.
-            </li>
-            <li className="font-popins text-sm text-dark-blue">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dicta
-              doloribus laborum quo, inventore optio nostrum, porro dolor quis
-              explicabo magnam minus magni cumque quia dignissimos illo dolorem
-              expedita nihil aliquid.
-            </li>
-          </ul>
         </div>
+      </div>
+      <div
+        onClick={() => router.push(`/build/education/${resumeId}`)}
+        className="mt-5 flex cursor-pointer items-center gap-2"
+      >
+        <Plus /> Add More
       </div>
     </BuilderLayout>
   );

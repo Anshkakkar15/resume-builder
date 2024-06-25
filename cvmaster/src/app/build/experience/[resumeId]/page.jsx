@@ -3,7 +3,7 @@
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { BuilderLayout } from "@/components/BuilderLayout";
 import { useForm } from "react-hook-form";
-import { useImperativeHandle, useRef, useState, useEffect } from "react";
+import { useEffect, useImperativeHandle, useRef, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Form,
@@ -20,6 +20,7 @@ import { TextEditor } from "@/components/TextEditor";
 import { experienceSchema } from "@/schemas/experinceSchema";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import { backStep } from "@/lib/getBuilderPage";
 
 export default function Experience() {
   const { resumeId } = useParams();
@@ -27,7 +28,7 @@ export default function Experience() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const expid = searchParams.get("expid");
-  console.log(atob(expid));
+  // console.log(atob(expid));
 
   const [isChecked, setIsChecked] = useState(false);
 
@@ -46,8 +47,9 @@ export default function Experience() {
   });
 
   useEffect(() => {
-    // Update the endDate field when the checkbox state changes
-    form.setValue("endDate", isChecked ? "" : form.getValues("endDate"));
+    if (isChecked) {
+      form?.setValue("endDate", "");
+    }
   }, [isChecked, form]);
 
   useImperativeHandle(formRef, () => ({
@@ -55,14 +57,14 @@ export default function Experience() {
   }));
 
   const handleContinue = () => {
-    if (formRef.current) {
-      formRef.current.submit();
+    if (formRef?.current) {
+      formRef?.current?.submit();
     }
   };
 
   const handleAddExperience = (data) => {
+    router.push(`/build/experience?id=${resumeId}`);
     console.log(data);
-    router.push(`/build/experience?id=${btoa(resumeId)}`);
   };
 
   return (
@@ -70,6 +72,10 @@ export default function Experience() {
       heading="Let's focus on your experience now"
       description="Start with your most recent job first."
       handleContinue={handleContinue}
+      handleBack={() => {
+        router?.push(`/build/language/${resumeId}`);
+        backStep("experience");
+      }}
     >
       <Form {...form}>
         <form>
@@ -129,7 +135,9 @@ export default function Experience() {
               />
             </div>
           </div>
-          <div className="mt-3 flex flex-wrap gap-3">
+          <div
+            className={`mt-3 flex flex-wrap ${isChecked ? "items-center" : ""} gap-3`}
+          >
             <div className="w-full flex-none sm:w-1/2 sm:flex-1">
               <FormField
                 control={form.control}
@@ -144,21 +152,22 @@ export default function Experience() {
               />
             </div>
             <div className="w-full flex-none sm:w-1/2 sm:flex-1">
-              <FormField
-                control={form.control}
-                name="endDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>END DATE</FormLabel>
-                    <DatePicker
-                      date={field.value}
-                      onChange={field.onChange}
-                      shouldOpen={!isChecked}
-                    />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {!isChecked && (
+                <FormField
+                  control={form.control}
+                  name="endDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>END DATE</FormLabel>
+                      <DatePicker
+                        date={field.value}
+                        onChange={field.onChange}
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
               <FormField
                 control={form.control}
                 name="present"
