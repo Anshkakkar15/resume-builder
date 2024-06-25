@@ -1,10 +1,11 @@
 "use client";
 
 import { BuilderLayout } from "@/components/BuilderLayout";
+import { nextStep } from "@/lib/getBuilderPage";
 import { Pencil, Plus, Trash } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function education() {
+export default function Education() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const resumeId = searchParams.get("id");
@@ -19,7 +20,9 @@ export default function education() {
       handleBack={() => {
         router.push(`/build/education/${resumeId}`);
       }}
-      handl
+      handleContinue={() => {
+        router.push(`/build/skills/${resumeId}`), nextStep("skills");
+      }}
     >
       <div className="rounded-md border-2 border-[#F9FAFB] bg-[#F9FAFB] p-5">
         <div className="flex flex-col gap-y-3">

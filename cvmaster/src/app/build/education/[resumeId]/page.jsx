@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+
 import {
   Select,
   SelectContent,
@@ -22,8 +23,10 @@ import { useParams, useRouter } from "next/navigation";
 import { useImperativeHandle, useRef } from "react";
 import { useForm } from "react-hook-form";
 import years, { months } from "../../../../../mock/date";
+import { educationSchema } from "@/schemas/educationSchema";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-export default function addEducation() {
+export default function AddEducation() {
   const router = useRouter();
   const { resumeId } = useParams();
   const formRef = useRef();
@@ -36,7 +39,7 @@ export default function addEducation() {
       graduationMonth: "",
       graduationYear: "",
     },
-    // resolver: yupResolver(),
+    resolver: yupResolver(educationSchema),
   });
 
   useImperativeHandle(formRef, () => ({
