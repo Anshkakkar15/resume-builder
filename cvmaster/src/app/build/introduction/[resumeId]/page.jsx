@@ -15,23 +15,21 @@ import { Input } from "@/components/ui/input";
 import { useImperativeHandle, useRef } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { introudctionSchema } from "@/schemas/introductionSchema";
+import { useDispatch, useSelector } from "react-redux";
+import { updateIntroduction } from "@/redux/IntroductionSlice";
 
 export default function Introduction() {
   const { resumeId } = useParams();
   const formRef = useRef();
   const router = useRouter();
+  const introductionInputs = useSelector((state) => state.IntroductionSlice);
 
   const form = useForm({
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      jobTitle: "",
-      email: "",
-      phone: "",
-      address: "",
-    },
+    defaultValues: introductionInputs,
     resolver: yupResolver(introudctionSchema),
   });
+
+  const dispatch = useDispatch();
 
   useImperativeHandle(formRef, () => ({
     submit: form.handleSubmit(handleAddIntroduction),
@@ -43,8 +41,13 @@ export default function Introduction() {
     }
   };
 
+  const handleInputChange = (field) => (e) => {
+    dispatch(updateIntroduction({ [field]: e.target.value }));
+    form.setValue(field, e.target.value);
+  };
+
   const handleAddIntroduction = (data) => {
-    console.log(data);
+    console.log(introductionInputs);
     router.push(`/build/summary/${resumeId}`);
     nextStep("summary");
   };
@@ -67,7 +70,12 @@ export default function Introduction() {
               render={({ field }) => (
                 <FormItem className="mt-3">
                   <FormLabel>FIRST NAME</FormLabel>
-                  <Input {...field} name="firstName" placeholder="FIRST NAME" />
+                  <Input
+                    {...field}
+                    name="firstName"
+                    placeholder="FIRST NAME"
+                    onChangeCapture={handleInputChange(field.name)}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -78,7 +86,12 @@ export default function Introduction() {
               render={({ field }) => (
                 <FormItem className="mt-3">
                   <FormLabel>LAST NAME</FormLabel>
-                  <Input {...field} name="lastName" placeholder="LAST NAME" />
+                  <Input
+                    {...field}
+                    name="lastName"
+                    placeholder="LAST NAME"
+                    onChangeCapture={handleInputChange(field.name)}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -89,7 +102,12 @@ export default function Introduction() {
               render={({ field }) => (
                 <FormItem className="mt-3">
                   <FormLabel>JOB TITLE</FormLabel>
-                  <Input {...field} name="jobTitle" placeholder="JOB TITLE" />
+                  <Input
+                    {...field}
+                    name="jobTitle"
+                    placeholder="JOB TITLE"
+                    onChangeCapture={handleInputChange(field.name)}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -100,7 +118,12 @@ export default function Introduction() {
               render={({ field }) => (
                 <FormItem className="mt-3">
                   <FormLabel>EMAIL</FormLabel>
-                  <Input {...field} name="email" placeholder="EMAIL" />
+                  <Input
+                    {...field}
+                    name="email"
+                    placeholder="EMAIL"
+                    onChangeCapture={handleInputChange(field.name)}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -116,6 +139,7 @@ export default function Introduction() {
                     type="number"
                     name="phone"
                     placeholder="PHONE"
+                    onChangeCapture={handleInputChange(field.name)}
                   />
                   <FormMessage />
                 </FormItem>
@@ -127,7 +151,12 @@ export default function Introduction() {
               render={({ field }) => (
                 <FormItem className="mt-3">
                   <FormLabel>ADDRESS</FormLabel>
-                  <Input {...field} name="address" placeholder="ADDRESS" />
+                  <Input
+                    {...field}
+                    name="address"
+                    placeholder="ADDRESS"
+                    onChangeCapture={handleInputChange(field.name)}
+                  />
                   <FormMessage />
                 </FormItem>
               )}

@@ -8,16 +8,21 @@ import {
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
 
-export const Template1 = () => {
+export const Template1 = ({ resume }) => {
   return (
     <div className="bg-white p-5 shadow-xl">
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-y-2">
           <h1 className="font-popins text-3xl font-bold italic text-[#664b10]">
-            Avery Davis
+            {resume.introduction.firstName || resume.introduction.lastName
+              ? resume.introduction.firstName
+              : "Avery Davis"}{" "}
+            {resume.introduction.lastName}
           </h1>
           <h2 className="font-popins text-xl font-semibold italic text-[#171717]">
-            Web Designer
+            {resume.introduction.jobTitle
+              ? resume.introduction.jobTitle
+              : "Web Designer"}
           </h2>
         </div>
         <div className="max-w-36">
@@ -34,19 +39,25 @@ export const Template1 = () => {
             <div className="flex gap-2">
               <Mail />
               <span className="my-auto text-xs font-semibold text-[#664b10]">
-                kakkaransh40@gmail.com
+                {resume.introduction.email
+                  ? resume.introduction.email
+                  : "averydavis@example.com"}
               </span>
             </div>
             <div className="flex gap-2">
               <Phone />
               <span className="my-auto text-xs font-semibold text-[#664b10]">
-                9878954548
+                {resume.introduction.phone
+                  ? resume.introduction.phone
+                  : "9876543210"}
               </span>
             </div>
             <div className="flex gap-2">
               <MapPin />
               <span className="my-auto text-xs font-semibold text-[#664b10]">
-                Mohali,India
+                {resume.introduction.address
+                  ? resume.introduction.address
+                  : "Delhi,india"}
               </span>
             </div>
           </div>
