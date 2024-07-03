@@ -18,7 +18,9 @@ const experienceSlice = createSlice({
   name: "education",
   initialState,
   reducers: {
-    updateExperience: (state, action) => {},
+    updateExperience: (state, action) => {
+      return { ...state.formState, ...action.payload };
+    },
   },
 });
 

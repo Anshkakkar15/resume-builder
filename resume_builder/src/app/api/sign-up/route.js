@@ -28,7 +28,7 @@ export async function POST(request) {
 
     return Response.json(
       {
-        message: "Sign Up successfull",
+        message: "Sign Up Successfull",
         success: true,
       },
       { status: 200 }

@@ -16,7 +16,7 @@ import {
 import { summarySchema } from "@/schemas/skillsSchema";
 import { backStep, nextStep } from "@/lib/getBuilderPage";
 import { useDispatch, useSelector } from "react-redux";
-import { updateSummary } from "@/redux/SummarySlice";
+import { updateSummary } from "@/redux/slices/SummarySlice";
 
 export default function Summary() {
   const { resumeId } = useParams();

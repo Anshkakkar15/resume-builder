@@ -16,7 +16,7 @@ import { useImperativeHandle, useRef } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { introudctionSchema } from "@/schemas/introductionSchema";
 import { useDispatch, useSelector } from "react-redux";
-import { updateIntroduction } from "@/redux/IntroductionSlice";
+import { updateIntroduction } from "@/redux/slices/IntroductionSlice";
 import { Label } from "@/components/ui/label";
 
 export default function Introduction() {
@@ -24,13 +24,12 @@ export default function Introduction() {
   const formRef = useRef();
   const router = useRouter();
   const introductionInputs = useSelector((state) => state.IntroductionSlice);
+  const dispatch = useDispatch();
 
   const form = useForm({
     defaultValues: introductionInputs,
     resolver: yupResolver(introudctionSchema),
   });
-
-  const dispatch = useDispatch();
 
   useImperativeHandle(formRef, () => ({
     submit: form.handleSubmit(handleAddIntroduction),
@@ -60,129 +59,126 @@ export default function Introduction() {
     nextStep("summary");
   };
 
-  console.log(introductionInputs);
   return (
-    <>
-      <BuilderLayout
-        heading="Let's start with your introduction"
-        description="Begin by including your full name and ways for employers to contact you"
-        handleBack={() => {
-          router?.push("/");
-        }}
-        handleContinue={handleContinue}
-      >
-        <Form {...form} className="space-y-6">
-          <form>
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem className="mt-3">
-                  <FormLabel>FIRST NAME</FormLabel>
-                  <Input
-                    {...field}
-                    name="firstName"
-                    placeholder="FIRST NAME"
-                    onChangeCapture={handleInputChange(field.name)}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
+    <BuilderLayout
+      heading="Let's start with your introduction"
+      description="Begin by including your full name and ways for employers to contact you"
+      handleBack={() => {
+        router?.push("/");
+      }}
+      handleContinue={handleContinue}
+    >
+      <Form {...form} className="space-y-6">
+        <form>
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem className="mt-3">
+                <FormLabel>FIRST NAME</FormLabel>
+                <Input
+                  {...field}
+                  name="firstName"
+                  placeholder="FIRST NAME"
+                  onChangeCapture={handleInputChange(field.name)}
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem className="mt-3">
+                <FormLabel>LAST NAME</FormLabel>
+                <Input
+                  {...field}
+                  name="lastName"
+                  placeholder="LAST NAME"
+                  onChangeCapture={handleInputChange(field.name)}
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="jobTitle"
+            render={({ field }) => (
+              <FormItem className="mt-3">
+                <FormLabel>JOB TITLE</FormLabel>
+                <Input
+                  {...field}
+                  name="jobTitle"
+                  placeholder="JOB TITLE"
+                  onChangeCapture={handleInputChange(field.name)}
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="mt-3">
+                <FormLabel>EMAIL</FormLabel>
+                <Input
+                  {...field}
+                  name="email"
+                  placeholder="EMAIL"
+                  onChangeCapture={handleInputChange(field.name)}
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem className="mt-3">
+                <FormLabel>PHONE</FormLabel>
+                <Input
+                  {...field}
+                  type="number"
+                  name="phone"
+                  placeholder="PHONE"
+                  onChangeCapture={handleInputChange(field.name)}
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem className="mt-3">
+                <FormLabel>ADDRESS</FormLabel>
+                <Input
+                  {...field}
+                  name="address"
+                  placeholder="ADDRESS"
+                  onChangeCapture={handleInputChange(field.name)}
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="mt-3">
+            <Label htmlFor="picture">IMAGE</Label>
+            <Input
+              type="file"
+              name="image"
+              accept="image/png, image/jpeg"
+              className="mt-4"
+              onChangeCapture={handleInputChange("image")}
             />
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem className="mt-3">
-                  <FormLabel>LAST NAME</FormLabel>
-                  <Input
-                    {...field}
-                    name="lastName"
-                    placeholder="LAST NAME"
-                    onChangeCapture={handleInputChange(field.name)}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="jobTitle"
-              render={({ field }) => (
-                <FormItem className="mt-3">
-                  <FormLabel>JOB TITLE</FormLabel>
-                  <Input
-                    {...field}
-                    name="jobTitle"
-                    placeholder="JOB TITLE"
-                    onChangeCapture={handleInputChange(field.name)}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem className="mt-3">
-                  <FormLabel>EMAIL</FormLabel>
-                  <Input
-                    {...field}
-                    name="email"
-                    placeholder="EMAIL"
-                    onChangeCapture={handleInputChange(field.name)}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem className="mt-3">
-                  <FormLabel>PHONE</FormLabel>
-                  <Input
-                    {...field}
-                    type="number"
-                    name="phone"
-                    placeholder="PHONE"
-                    onChangeCapture={handleInputChange(field.name)}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem className="mt-3">
-                  <FormLabel>ADDRESS</FormLabel>
-                  <Input
-                    {...field}
-                    name="address"
-                    placeholder="ADDRESS"
-                    onChangeCapture={handleInputChange(field.name)}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="mt-3">
-              <Label htmlFor="picture">IMAGE</Label>
-              <Input
-                type="file"
-                name="image"
-                accept="image/png, image/jpeg"
-                className="mt-4"
-                onChangeCapture={handleInputChange("image")}
-              />
-            </div>
-          </form>
-        </Form>
-      </BuilderLayout>
-    </>
+          </div>
+        </form>
+      </Form>
+    </BuilderLayout>
   );
 }

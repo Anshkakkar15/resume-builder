@@ -16,8 +16,15 @@ import Link from "next/link";
 import { signUpSchema } from "@/schemas/authSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSignUpMutation } from "@/redux/api";
+import { useToast } from "@/components/ui/use-toast";
+import { ButtonLoader } from "@/components/loaders/ButtonLoader";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
+  const router = useRouter();
+  const [signUp, { isLoading, isSuccess, isError }] = useSignUpMutation();
+  const { toast } = useToast();
   const form = useForm({
     resolver: yupResolver(signUpSchema),
     defaultValues: {
@@ -27,8 +34,21 @@ export default function SignUp() {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const response = await signUp(data);
+    console.log(isSuccess);
+    if (isSuccess) {
+      toast({
+        title: response?.data?.message,
+      });
+      router.push("/sign-in");
+    }
+    if (isError) {
+      toast({
+        variant: "destructive",
+        title: response?.error?.data?.message,
+      });
+    }
   };
 
   return (
@@ -88,7 +108,12 @@ export default function SignUp() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Password</FormLabel>
-                        <Input {...field} name="password" className="mt-3" />
+                        <Input
+                          {...field}
+                          type="password"
+                          name="password"
+                          className="mt-3"
+                        />
                         <FormMessage />
                       </FormItem>
                     )}
@@ -96,8 +121,10 @@ export default function SignUp() {
                   <Button
                     type="submit"
                     className="mt-5 w-full md:mt-7 2xl:mt-8"
+                    disabled={isLoading}
                   >
-                    Sign Up
+                    {isLoading && <ButtonLoader />}
+                    {!isLoading && "Sign Up"}
                   </Button>
                 </form>
               </Form>

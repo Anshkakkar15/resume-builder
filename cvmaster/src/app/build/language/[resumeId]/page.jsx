@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { backStep, nextStep } from "@/lib/getBuilderPage";
-import { addLanguage, updateLanguage } from "@/redux/LanguageSlice";
+import { addLanguage, updateLanguage } from "@/redux/slices/LanguageSlice";
 import { languageAndSkillSchema } from "@/schemas/languageAndSkillSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Plus, X } from "lucide-react";
