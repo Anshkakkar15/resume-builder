@@ -15,16 +15,19 @@ import {
 } from "@/components/ui/form";
 import { summarySchema } from "@/schemas/skillsSchema";
 import { backStep, nextStep } from "@/lib/getBuilderPage";
+import { useDispatch, useSelector } from "react-redux";
+import { updateSummary } from "@/redux/SummarySlice";
 
 export default function Summary() {
   const { resumeId } = useParams();
   const formRef = useRef();
   const router = useRouter();
 
+  const summaryInputs = useSelector((state) => state.SummarySlice);
+  const dispatch = useDispatch();
+
   const form = useForm({
-    defaultValues: {
-      summary: "",
-    },
+    defaultValues: summaryInputs,
     resolver: yupResolver(summarySchema),
   });
 
@@ -39,7 +42,7 @@ export default function Summary() {
   };
 
   const handleAddSummary = (data) => {
-    console.log(data);
+    console.log(summaryInputs);
     router.push(`/build/language/${resumeId}`);
     nextStep("language");
   };
@@ -61,7 +64,14 @@ export default function Summary() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>SUMMARY</FormLabel>
-                <Textarea {...field} name="summary" rows="10" />
+                <Textarea
+                  {...field}
+                  name="summary"
+                  rows="10"
+                  onChangeCapture={(e) =>
+                    dispatch(updateSummary(e.target.value))
+                  }
+                />
                 <FormMessage />
               </FormItem>
             )}

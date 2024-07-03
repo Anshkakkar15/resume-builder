@@ -21,6 +21,7 @@ import { experienceSchema } from "@/schemas/experinceSchema";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { backStep } from "@/lib/getBuilderPage";
+import { useSelector } from "react-redux";
 
 export default function Experience() {
   const { resumeId } = useParams();
@@ -31,18 +32,10 @@ export default function Experience() {
   // console.log(atob(expid));
 
   const [isChecked, setIsChecked] = useState(false);
+  const experienceInputs = useSelector((state) => state.ExperienceSlice);
 
   const form = useForm({
-    defaultValues: {
-      jobTitle: "",
-      employer: "",
-      city: "",
-      country: "",
-      startDate: "",
-      endDate: "",
-      responsibilities: "",
-      present: false,
-    },
+    defaultValues: experienceInputs,
     resolver: yupResolver(experienceSchema),
   });
 

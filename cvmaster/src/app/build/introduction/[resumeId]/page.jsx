@@ -17,6 +17,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { introudctionSchema } from "@/schemas/introductionSchema";
 import { useDispatch, useSelector } from "react-redux";
 import { updateIntroduction } from "@/redux/IntroductionSlice";
+import { Label } from "@/components/ui/label";
 
 export default function Introduction() {
   const { resumeId } = useParams();
@@ -42,8 +43,15 @@ export default function Introduction() {
   };
 
   const handleInputChange = (field) => (e) => {
-    dispatch(updateIntroduction({ [field]: e.target.value }));
-    form.setValue(field, e.target.value);
+    const value = field === "image" ? e.target.files[0] : e.target.value;
+    dispatch(updateIntroduction({ [field]: value }));
+    field === "image" &&
+      dispatch(
+        updateIntroduction({
+          imageUrl: URL.createObjectURL(e.target.files[0]),
+        }),
+      );
+    form.setValue(field, value);
   };
 
   const handleAddIntroduction = (data) => {
@@ -52,6 +60,7 @@ export default function Introduction() {
     nextStep("summary");
   };
 
+  console.log(introductionInputs);
   return (
     <>
       <BuilderLayout
@@ -161,6 +170,16 @@ export default function Introduction() {
                 </FormItem>
               )}
             />
+            <div className="mt-3">
+              <Label htmlFor="picture">IMAGE</Label>
+              <Input
+                type="file"
+                name="image"
+                accept="image/png, image/jpeg"
+                className="mt-4"
+                onChangeCapture={handleInputChange("image")}
+              />
+            </div>
           </form>
         </Form>
       </BuilderLayout>

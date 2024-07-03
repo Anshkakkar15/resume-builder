@@ -9,21 +9,26 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { backStep, nextStep } from "@/lib/getBuilderPage";
+import { addLanguage, updateLanguage } from "@/redux/LanguageSlice";
 import { languageAndSkillSchema } from "@/schemas/languageAndSkillSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Plus, X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useImperativeHandle, useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Language() {
   const { resumeId } = useParams();
   const router = useRouter();
   const formRef = useRef();
 
+  const dispatch = useDispatch();
+  const languageInput = useSelector((state) => state.LanguageSlice.language);
+
   const form = useForm({
     defaultValues: {
-      languages: [{ language: "" }],
+      languages: languageInput,
     },
     resolver: yupResolver(languageAndSkillSchema),
   });
@@ -50,54 +55,61 @@ export default function Language() {
   };
 
   return (
-    <>
-      <BuilderLayout
-        heading="Let's add your preferred languages"
-        description="Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+    <BuilderLayout
+      heading="Let's add your preferred languages"
+      description="Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                 Doloremque dolorem dignissimos rerum"
-        handleBack={() => {
-          router?.push(`/build/summary/${resumeId}`);
-          backStep("language");
-        }}
-        handleContinue={handleContinue}
-      >
-        <Form {...form}>
-          <form>
-            <FormLabel>LANGUAGE</FormLabel>
-            {fields.map((field, index) => (
-              <FormField
-                key={field.id}
-                control={form.control}
-                name={`languages.${index}.language`}
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center gap-4">
-                      <Input
-                        {...field}
-                        placeholder="LANGUAGE"
-                        className="mt-3"
-                      />
-                      <div
-                        className="mt-3 cursor-pointer rounded-md bg-dark-blue p-2 text-white"
-                        onClick={() => remove(index)}
-                      >
-                        <X />
-                      </div>
+      handleBack={() => {
+        router?.push(`/build/summary/${resumeId}`);
+        backStep("language");
+      }}
+      handleContinue={handleContinue}
+    >
+      <Form {...form}>
+        <form>
+          <FormLabel>LANGUAGE</FormLabel>
+          {fields.map((field, index) => (
+            <FormField
+              key={field.id}
+              control={form.control}
+              name={`languages.${index}.language`}
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center gap-4">
+                    <Input
+                      {...field}
+                      placeholder="LANGUAGE"
+                      className="mt-3"
+                      onChange={(e) => {
+                        field.onChange(e);
+                        dispatch(
+                          updateLanguage({ index, value: e.target.value }),
+                        );
+                      }}
+                    />
+                    <div
+                      className="mt-3 cursor-pointer rounded-md bg-dark-blue p-2 text-white"
+                      onClick={() => remove(index)}
+                    >
+                      <X />
                     </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ))}
-            <div
-              onClick={() => append({ language: "" })}
-              className="mt-5 flex cursor-pointer items-center gap-2"
-            >
-              <Plus /> Add More
-            </div>
-          </form>
-        </Form>
-      </BuilderLayout>
-    </>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+          <div
+            onClick={() => {
+              append({ language: "" });
+              dispatch(addLanguage());
+            }}
+            className="mt-5 flex cursor-pointer items-center gap-2"
+          >
+            <Plus /> Add More
+          </div>
+        </form>
+      </Form>
+    </BuilderLayout>
   );
 }

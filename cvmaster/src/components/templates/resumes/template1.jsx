@@ -1,6 +1,4 @@
 import React from "react";
-import { ASSETS } from "../../../../assets";
-import Image from "next/image";
 import { Mail, MapPin, Phone } from "lucide-react";
 import {
   VerticalTimeline,
@@ -26,11 +24,13 @@ export const Template1 = ({ resume }) => {
           </h2>
         </div>
         <div className="max-w-36">
-          <Image
-            src={ASSETS.AUTH_IMG}
-            alt="Avery Davis"
-            className="overflow-hidden"
-          />
+          {resume.introduction.imageUrl && (
+            <img
+              src={resume.introduction.imageUrl}
+              alt="Avery Davis"
+              className="overflow-hidden"
+            />
+          )}
         </div>
       </div>
       <div className="pt-5">
@@ -65,12 +65,14 @@ export const Template1 = ({ resume }) => {
       </div>
       <div className="pt-5">
         <p className="font-popins text-xs text-[#171717]">
-          Enthusiastic and self-motivated web designer with 5• years of
+          {resume.summary.summary
+            ? resume.summary.summary
+            : `Enthusiastic and self-motivated web designer with 5• years of
           experience. Eager to join Studio Shodwe and bring my skill in frontend
           development, and visual design to every project that will be received
           in the future. A previous project for improving and redesigning
           reallygreatsite.com resulted in an increase in web tramc by 50% and
-          performance improvement by
+          performance improvement by`}
         </p>
       </div>
       <div className="pt-5">
@@ -207,13 +209,18 @@ export const Template1 = ({ resume }) => {
           </h2>
           <div className="w-full border-b-[1px] border-[#664b10]" />
         </div>
-        <ul className="ml-9 flex list-disc flex-wrap justify-center gap-y-3">
-          <li className="basis-1/2 text-sm font-semibold text-[#171717]">
-            English
-          </li>
-          <li className="basis-1/2 text-sm font-semibold text-[#171717]">
-            Hindi
-          </li>
+        <ul className="ml-9 flex list-disc flex-wrap gap-y-3">
+          {resume.languages?.length >= 1 &&
+            resume.languages.map((language, i) => {
+              return (
+                <li
+                  key={i}
+                  className="basis-1/2 text-sm font-semibold text-[#171717]"
+                >
+                  {language.language}
+                </li>
+              );
+            })}
         </ul>
       </div>
     </div>

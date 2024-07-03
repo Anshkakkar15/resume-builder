@@ -7,6 +7,8 @@ const initialState = {
   email: "",
   phone: "",
   address: "",
+  image:"",
+  imageUrl:""
 };
 
 export const introductionSlice = createSlice({
