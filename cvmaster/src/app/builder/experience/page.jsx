@@ -11,15 +11,15 @@ export default function Experience() {
   const resumeId = searchParams.get("id");
 
   const handleEditExperience = (id) => {
-    router.push(`/build/experience/${resumeId}?expid=${id}`);
+    router.push(`/builder/experience/${resumeId}?expid=${id}`);
   };
 
   return (
     <BuilderLayout
       heading={"Review your experience"}
-      handleBack={() => router.push(`/build/experience/${resumeId}`)}
+      handleBack={() => router.push(`/builder/experience/${resumeId}`)}
       handleContinue={() => {
-        router.push(`/build/education/${resumeId}`);
+        router.push(`/builder/education/${resumeId}`);
         nextStep("education");
       }}
     >
@@ -61,7 +61,7 @@ export default function Experience() {
         </div>
       </div>
       <div
-        onClick={() => router.push(`/build/experience/${resumeId}`)}
+        onClick={() => router.push(`/builder/experience/${resumeId}`)}
         className="mt-5 flex cursor-pointer items-center gap-2"
       >
         <Plus /> Add More

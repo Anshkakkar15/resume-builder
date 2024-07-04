@@ -8,20 +8,27 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { backStep } from "@/lib/getBuilderPage";
+import { backStep, nextStep } from "@/lib/getBuilderPage";
+import { addLanguage, updateLanguage } from "@/redux/slices/LanguageSlice";
 import { languageAndSkillSchema } from "@/schemas/languageAndSkillSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Plus, X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useImperativeHandle, useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-export default function Skills() {
-  const router = useRouter();
+import { useDispatch, useSelector } from "react-redux";
+
+export default function Language() {
   const { resumeId } = useParams();
+  const router = useRouter();
   const formRef = useRef();
+
+  const dispatch = useDispatch();
+  const languageInput = useSelector((state) => state.LanguageSlice.language);
+
   const form = useForm({
     defaultValues: {
-      languages: [{ language: "" }],
+      languages: languageInput,
     },
     resolver: yupResolver(languageAndSkillSchema),
   });
@@ -32,7 +39,7 @@ export default function Skills() {
   });
 
   useImperativeHandle(formRef, () => ({
-    submit: form.handleSubmit(handleAddSkills),
+    submit: form.handleSubmit(handleAddLanguage),
   }));
 
   const handleContinue = () => {
@@ -40,24 +47,27 @@ export default function Skills() {
       formRef.current.submit();
     }
   };
-  const handleAddSkills = (data) => {
+
+  const handleAddLanguage = (data) => {
     console.log(data);
-    router.push(`/build/download/${resumeId}`);
+    router.push(`/builder/experience/${resumeId}`);
+    nextStep("experience");
   };
 
   return (
     <BuilderLayout
-      heading={"We suggest including a few skills."}
-      description="Choose skills that align with the job requirements to demonstrate your suitability for the role."
+      heading="Let's add your preferred languages"
+      description="Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                Doloremque dolorem dignissimos rerum"
       handleBack={() => {
-        router.push(`/build/education?id=${resumeId}`);
-        backStep("skills");
+        router?.push(`/builder/summary/${resumeId}`);
+        backStep("language");
       }}
       handleContinue={handleContinue}
     >
       <Form {...form}>
         <form>
-          <FormLabel>SKILLS</FormLabel>
+          <FormLabel>LANGUAGE</FormLabel>
           {fields.map((field, index) => (
             <FormField
               key={field.id}
@@ -66,7 +76,17 @@ export default function Skills() {
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center gap-4">
-                    <Input {...field} placeholder="SKILLS" className="mt-3" />
+                    <Input
+                      {...field}
+                      placeholder="LANGUAGE"
+                      className="mt-3"
+                      onChange={(e) => {
+                        field.onChange(e);
+                        dispatch(
+                          updateLanguage({ index, value: e.target.value }),
+                        );
+                      }}
+                    />
                     <div
                       className="mt-3 cursor-pointer rounded-md bg-dark-blue p-2 text-white"
                       onClick={() => remove(index)}
@@ -80,7 +100,10 @@ export default function Skills() {
             />
           ))}
           <div
-            onClick={() => append({ language: "" })}
+            onClick={() => {
+              append({ language: "" });
+              dispatch(addLanguage());
+            }}
             className="mt-5 flex cursor-pointer items-center gap-2"
           >
             <Plus /> Add More

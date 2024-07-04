@@ -56,7 +56,7 @@ export default function Experience() {
   };
 
   const handleAddExperience = (data) => {
-    router.push(`/build/experience?id=${resumeId}`);
+    router.push(`/builder/experience?id=${resumeId}`);
     console.log(data);
   };
 
@@ -66,7 +66,7 @@ export default function Experience() {
       description="Start with your most recent job first."
       handleContinue={handleContinue}
       handleBack={() => {
-        router?.push(`/build/language/${resumeId}`);
+        router?.push(`/builder/language/${resumeId}`);
         backStep("experience");
       }}
     >

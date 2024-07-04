@@ -11,17 +11,17 @@ export default function Education() {
   const resumeId = searchParams.get("id");
 
   const handleEditExperience = (id) => {
-    router.push(`/build/education/${resumeId}?edu=${id}`);
+    router.push(`/builder/education/${resumeId}?edu=${id}`);
   };
 
   return (
     <BuilderLayout
       heading="Education Summary"
       handleBack={() => {
-        router.push(`/build/education/${resumeId}`);
+        router.push(`/builder/education/${resumeId}`);
       }}
       handleContinue={() => {
-        router.push(`/build/skills/${resumeId}`), nextStep("skills");
+        router.push(`/builder/skills/${resumeId}`), nextStep("skills");
       }}
     >
       <div className="rounded-md border-2 border-[#F9FAFB] bg-[#F9FAFB] p-5">
@@ -48,7 +48,7 @@ export default function Education() {
         </div>
       </div>
       <div
-        onClick={() => router.push(`/build/education/${resumeId}`)}
+        onClick={() => router.push(`/builder/education/${resumeId}`)}
         className="mt-5 flex cursor-pointer items-center gap-2"
       >
         <Plus /> Add More

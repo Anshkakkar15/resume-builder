@@ -54,7 +54,7 @@ export default function AddEducation() {
 
   const handleAddEducation = (data) => {
     console.log(data);
-    router.push(`/build/education?id=${resumeId}`);
+    router.push(`/builder/education?id=${resumeId}`);
   };
 
   return (
@@ -62,7 +62,7 @@ export default function AddEducation() {
       heading="Tell us about your education"
       description="Tell us about any colleges, vocational programs, or training courses you took"
       handleBack={() => {
-        router.push(`/build/experience?id=${resumeId}`);
+        router.push(`/builder/experience?id=${resumeId}`);
         backStep("education");
       }}
       handleContinue={handleContinue}

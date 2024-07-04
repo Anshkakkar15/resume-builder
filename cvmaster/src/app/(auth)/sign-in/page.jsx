@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { ASSETS } from "../../../../assets";
 import {
   Form,
@@ -16,8 +16,21 @@ import Link from "next/link";
 import { signInSchema } from "@/schemas/authSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useSignInMutation } from "@/redux/api";
+import { ButtonLoader } from "@/components/loaders/ButtonLoader";
+import { useToast } from "@/components/ui/use-toast";
+import { Eye, EyeOff } from "lucide-react";
+import { useToken } from "@/lib/useToken";
+import { useAuth } from "@/lib/useAuth";
 
 export default function SignIn() {
+  const router = useRouter();
+  const { setToken } = useToken();
+  const { setAuth } = useAuth();
+  const [signIn, { isLoading, isError }] = useSignInMutation();
+  const { toast } = useToast();
+  const [password, showPassword] = useState(false);
   const form = useForm({
     resolver: yupResolver(signInSchema),
     defaultValues: {
@@ -26,8 +39,24 @@ export default function SignIn() {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const response = await signIn(data);
+    if (response?.data?.success) {
+      toast({
+        title: response?.data?.message,
+      });
+      setToken(response?.data?.data?._id);
+      setAuth(response?.data?.data);
+      router.push("/");
+    }
+    if (isError) {
+      toast({
+        variant: "destructive",
+        title: response?.error?.data?.message
+          ? response?.error?.data?.message
+          : "Something went wrong! Please try again later",
+      });
+    }
   };
 
   return (
@@ -78,13 +107,21 @@ export default function SignIn() {
                     control={form.control}
                     name="password"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="mt-3">
                         <FormLabel>Password</FormLabel>
-                        <Input
-                          {...field}
-                          name="password"
-                          className="mt-3 border-dark-blue outline-none"
-                        />
+                        <div className="relative">
+                          <Input
+                            {...field}
+                            type={`${password ? "text" : "password"}`}
+                            name="password"
+                          />
+                          <div
+                            onClick={() => showPassword(!password)}
+                            className="absolute right-3 top-1/2 -translate-y-2/4 cursor-pointer"
+                          >
+                            {password ? <Eye /> : <EyeOff />}
+                          </div>
+                        </div>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -92,8 +129,10 @@ export default function SignIn() {
                   <Button
                     type="submit"
                     className="mt-5 w-full md:mt-7 2xl:mt-8"
+                    disabled={isLoading}
                   >
-                    Sign In
+                    {isLoading && <ButtonLoader />}
+                    {!isLoading && "Sign In"}
                   </Button>
                 </form>
               </Form>

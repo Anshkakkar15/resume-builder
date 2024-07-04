@@ -55,7 +55,7 @@ export default function Introduction() {
 
   const handleAddIntroduction = (data) => {
     console.log(introductionInputs);
-    router.push(`/build/summary/${resumeId}`);
+    router.push(`/builder/summary/${resumeId}`);
     nextStep("summary");
   };
 

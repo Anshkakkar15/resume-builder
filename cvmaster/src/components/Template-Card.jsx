@@ -9,7 +9,7 @@ export const TemplateCard = ({ temlates }) => {
   const [isHovered, setHovered] = useState(false);
   const router = useRouter();
   const handleRouteToBulilder = () => {
-    router.push(`/build/introduction/${temlates.id}`);
+    router.push(`/builder/introduction/${temlates.id}`);
     nextStep("introduction");
   };
   return (

@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { ASSETS } from "../../../../assets";
 import {
   Form,
@@ -20,11 +20,15 @@ import { useSignUpMutation } from "@/redux/api";
 import { useToast } from "@/components/ui/use-toast";
 import { ButtonLoader } from "@/components/loaders/ButtonLoader";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function SignUp() {
   const router = useRouter();
-  const [signUp, { isLoading, isSuccess, isError }] = useSignUpMutation();
+  const [signUp, { isLoading, isError }] = useSignUpMutation();
   const { toast } = useToast();
+
+  const [password, showPassword] = useState(false);
+
   const form = useForm({
     resolver: yupResolver(signUpSchema),
     defaultValues: {
@@ -36,8 +40,7 @@ export default function SignUp() {
 
   const onSubmit = async (data) => {
     const response = await signUp(data);
-    console.log(isSuccess);
-    if (isSuccess) {
+    if (response?.data?.success) {
       toast({
         title: response?.data?.message,
       });
@@ -46,7 +49,9 @@ export default function SignUp() {
     if (isError) {
       toast({
         variant: "destructive",
-        title: response?.error?.data?.message,
+        title: response?.error?.data?.message
+          ? response?.error?.data?.message
+          : "Something went wrong! Please try again later",
       });
     }
   };
@@ -84,9 +89,9 @@ export default function SignUp() {
                     control={form.control}
                     name="username"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="mt-3">
                         <FormLabel>Name</FormLabel>
-                        <Input {...field} name="username" className="mt-3" />
+                        <Input {...field} name="username" />
                         <FormMessage />
                       </FormItem>
                     )}
@@ -95,9 +100,9 @@ export default function SignUp() {
                     control={form.control}
                     name="email"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="mt-3">
                         <FormLabel>Email</FormLabel>
-                        <Input {...field} name="email" className="mt-3" />
+                        <Input {...field} name="email" />
                         <FormMessage />
                       </FormItem>
                     )}
@@ -106,14 +111,21 @@ export default function SignUp() {
                     control={form.control}
                     name="password"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="mt-3">
                         <FormLabel>Password</FormLabel>
-                        <Input
-                          {...field}
-                          type="password"
-                          name="password"
-                          className="mt-3"
-                        />
+                        <div className="relative">
+                          <Input
+                            {...field}
+                            type={`${password ? "text" : "password"}`}
+                            name="password"
+                          />
+                          <div
+                            onClick={() => showPassword(!password)}
+                            className="absolute right-3 top-1/2 -translate-y-2/4 cursor-pointer"
+                          >
+                            {password ? <Eye /> : <EyeOff />}
+                          </div>
+                        </div>
                         <FormMessage />
                       </FormItem>
                     )}

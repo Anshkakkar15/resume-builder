@@ -43,7 +43,7 @@ export default function Summary() {
 
   const handleAddSummary = (data) => {
     console.log(summaryInputs);
-    router.push(`/build/language/${resumeId}`);
+    router.push(`/builder/language/${resumeId}`);
     nextStep("language");
   };
 
@@ -52,7 +52,7 @@ export default function Summary() {
       heading="Now add a brief summary showcasing your abilities."
       handleContinue={handleContinue}
       handleBack={() => {
-        router.push(`/build/introduction/${resumeId}`);
+        router.push(`/builder/introduction/${resumeId}`);
         backStep("summary");
       }}
     >

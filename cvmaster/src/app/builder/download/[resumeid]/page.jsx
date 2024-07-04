@@ -29,7 +29,7 @@ export default function Download() {
       continueBtn="Download"
       ref={pdfRef}
       handleContinue={handleDownloadPdf}
-      handleBack={() => router.push(`/build/skills/${resumeid}`)}
+      handleBack={() => router.push(`/builder/skills/${resumeid}`)}
     />
   );
 }
