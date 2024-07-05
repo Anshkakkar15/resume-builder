@@ -28,7 +28,7 @@ export async function POST(request) {
     }
 
     return Response.json(
-      { message: "Details saved successfully", success: true },
+      { message: "Details submitted", success: true },
       { status: 200 }
     );
   } catch (error) {

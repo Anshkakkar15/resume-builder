@@ -26,7 +26,7 @@ export const Template1 = ({ resume }) => {
         <div className="max-w-36">
           {resume.introduction.imageUrl && (
             <img
-              src={resume.introduction.imageUrl}
+              src={`${resume.introduction.imageUrl}`}
               alt="Avery Davis"
               className="overflow-hidden"
             />

@@ -43,7 +43,7 @@ export default function SignIn() {
     const response = await signIn(data);
     if (response?.data?.success) {
       toast({
-        title: response?.data?.message,
+        title: `Welcome ${response?.data?.data?.username}`,
       });
       setToken(response?.data?.data?._id);
       setAuth(response?.data?.data);

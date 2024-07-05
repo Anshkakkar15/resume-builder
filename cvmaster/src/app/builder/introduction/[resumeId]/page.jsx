@@ -1,6 +1,5 @@
 "use client";
 import { nextStep } from "@/lib/getBuilderPage";
-import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { BuilderLayout } from "@/components/BuilderLayout";
 import {
@@ -12,19 +11,36 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { useImperativeHandle, useRef } from "react";
+import { useEffect, useImperativeHandle, useRef } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { introudctionSchema } from "@/schemas/introductionSchema";
 import { useDispatch, useSelector } from "react-redux";
 import { updateIntroduction } from "@/redux/slices/IntroductionSlice";
-import { Label } from "@/components/ui/label";
+import { useAddIntroductionMutation } from "@/redux/api";
+import { useToast } from "@/components/ui/use-toast";
 
-export default function Introduction() {
-  const { resumeId } = useParams();
+export default function Introduction({ params }) {
   const formRef = useRef();
   const router = useRouter();
+  const { toast } = useToast();
   const introductionInputs = useSelector((state) => state.IntroductionSlice);
+
+  const userId = useSelector((state) => state.AuthSlice.userId);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const defaultValues = {};
+    defaultValues.firstName = introductionInputs?.firstName;
+    defaultValues.lastName = introductionInputs?.lastName;
+    defaultValues.jobTitle = introductionInputs?.jobTitle;
+    defaultValues.email = introductionInputs?.email;
+    defaultValues.phone = introductionInputs?.phone;
+    defaultValues.address = introductionInputs?.address;
+    form.reset(defaultValues);
+  }, [introductionInputs]);
+
+  const [addIntroduction, { isLoading, isError }] =
+    useAddIntroductionMutation();
 
   const form = useForm({
     defaultValues: introductionInputs,
@@ -47,16 +63,41 @@ export default function Introduction() {
     field === "image" &&
       dispatch(
         updateIntroduction({
-          imageUrl: URL.createObjectURL(e.target.files[0]),
+          imageUrl:
+            e.target.files[0] && URL?.createObjectURL(e.target.files[0]),
         }),
       );
     form.setValue(field, value);
   };
 
-  const handleAddIntroduction = (data) => {
+  const handleAddIntroduction = async () => {
+    const formData = new FormData();
     console.log(introductionInputs);
-    router.push(`/builder/summary/${resumeId}`);
-    nextStep("summary");
+    formData.append("userId", userId);
+    formData.append("resumeId", params?.resumeId);
+    formData.append("firstName", introductionInputs.firstName);
+    formData.append("lastName", introductionInputs.lastName);
+    formData.append("jobTitle", introductionInputs.jobTitle);
+    formData.append("email", introductionInputs.email);
+    formData.append("phone", introductionInputs.phone);
+    formData.append("address", introductionInputs.address);
+    formData.append("image", introductionInputs.image);
+    const response = await addIntroduction(formData);
+    if (response?.data?.message) {
+      router.push(`/builder/summary/${params?.resumeId}`);
+      nextStep("summary");
+      toast({
+        title: response?.data?.message,
+      });
+    }
+    if (isError) {
+      toast({
+        variant: "destructive",
+        title: response?.error?.data?.message
+          ? response?.error?.data?.message
+          : "Error while submitting details",
+      });
+    }
   };
 
   return (
@@ -66,7 +107,9 @@ export default function Introduction() {
       handleBack={() => {
         router?.push("/");
       }}
+      resumeId={params?.resumeId}
       handleContinue={handleContinue}
+      isLoading={isLoading}
     >
       <Form {...form} className="space-y-6">
         <form>
@@ -168,13 +211,22 @@ export default function Introduction() {
             )}
           />
           <div className="mt-3">
-            <Label htmlFor="picture">IMAGE</Label>
-            <Input
-              type="file"
+            <FormField
+              control={form.control}
               name="image"
-              accept="image/png, image/jpeg"
-              className="mt-4"
-              onChangeCapture={handleInputChange("image")}
+              render={({ field }) => (
+                <FormItem className="mt-3">
+                  <FormLabel>IMAGE</FormLabel>
+                  <Input
+                    {...field}
+                    type="file"
+                    name="image"
+                    accept="image/png, image/jpeg"
+                    onChangeCapture={handleInputChange("image")}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
         </form>

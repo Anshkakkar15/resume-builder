@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import { NextResponse } from "next/server";
 import { AUTH_ID_KEY } from "./constants";
 

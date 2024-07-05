@@ -1,13 +1,99 @@
 "use client";
 
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect } from "react";
 import { ResumeComponent } from "./templates";
 
 import { Footer } from "./Footer";
 import { BuilderTopbar } from "./BuilderTopbar";
 import { motion, AnimatePresence } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import { useToken } from "@/lib/useToken";
+import { useAuth } from "@/lib/useAuth";
+import { updateUserAuth } from "@/redux/slices/AuthSlice";
+import { updateIntroduction } from "@/redux/slices/IntroductionSlice";
+import {
+  useGetIntroductionQuery,
+  useGetLanguagesQuery,
+  useGetSummaryQuery,
+} from "@/redux/api";
+import { ButtonLoader } from "./loaders/ButtonLoader";
+import { updateSummary } from "@/redux/slices/SummarySlice";
+import {
+  addLanguage,
+  setLanguages,
+  updateLanguage,
+} from "@/redux/slices/LanguageSlice";
 
 export const BuilderLayout = forwardRef((props, ref) => {
+  const { getAuth } = useAuth();
+  const { getToken } = useToken();
+  const userDetails = getAuth();
+  const userToken = getToken();
+  const dispatch = useDispatch();
+
+  const userId = useSelector((state) => state.AuthSlice.userId);
+
+  const getIntroduction = useGetIntroductionQuery(
+    `userId=${userId}&resumeId=${props?.resumeId}`,
+    {
+      skip: !userId,
+    },
+  );
+
+  const getSummary = useGetSummaryQuery(
+    `userId=${userId}&resumeId=${props?.resumeId}`,
+    {
+      skip: !userId,
+    },
+  );
+
+  const getLanguages = useGetLanguagesQuery(
+    `userId=${userId}&resumeId=${props?.resumeId}`,
+    {
+      skip: !userId,
+    },
+  );
+
+  useEffect(() => {
+    dispatch(
+      updateIntroduction({
+        firstName: getIntroduction?.data?.getUserIntro?.firstName,
+        lastName: getIntroduction?.data?.getUserIntro?.lastName,
+        jobTitle: getIntroduction?.data?.getUserIntro?.jobTitle,
+        email: getIntroduction?.data?.getUserIntro?.email,
+        phone: getIntroduction?.data?.getUserIntro?.phone,
+        address: getIntroduction?.data?.getUserIntro?.address,
+        imageUrl: `${process.env.NEXT_PUBLIC_BASE_APP_URL}${getIntroduction?.data?.getUserIntro?.image}`,
+      }),
+    );
+  }, [getIntroduction?.data?.getUserIntro]);
+
+  useEffect(() => {
+    dispatch(updateSummary(getSummary?.data?.getSummary?.summary));
+  }, [getSummary?.data?.getSummary]);
+
+  useEffect(() => {
+    if (getLanguages?.isSuccess && getLanguages.data.getLanguages) {
+      const languages = getLanguages.data.getLanguages.languages.map(
+        (lang) => ({
+          language: lang,
+        }),
+      );
+      dispatch(setLanguages(languages));
+    }
+  }, [getLanguages?.isSuccess, dispatch]);
+
+  useEffect(() => {
+    if (userToken) {
+      dispatch(
+        updateUserAuth({
+          userId: userToken,
+          userDetails: userDetails && JSON.parse(userDetails),
+        }),
+      );
+    }
+  }, [userToken, userDetails]);
+
   return (
     <>
       <BuilderTopbar />
@@ -68,15 +154,19 @@ export const BuilderLayout = forwardRef((props, ref) => {
             >
               Back
             </motion.button>
-            <motion.button
-              initial={{ scale: 1 }}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="rounded-full border border-[#4285f4] bg-[#4285f4] px-12 py-2 text-lg text-white"
-              onClick={props?.handleContinue}
-            >
-              {props?.continueBtn ? props?.continueBtn : "Continue"}
-            </motion.button>
+            {props?.isLoading ? (
+              <ButtonLoader />
+            ) : (
+              <motion.button
+                initial={{ scale: 1 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="rounded-full border border-[#4285f4] bg-[#4285f4] px-12 py-2 text-lg text-white"
+                onClick={props?.handleContinue}
+              >
+                {props?.continueBtn ? props?.continueBtn : "Continue"}
+              </motion.button>
+            )}
           </div>
           <Footer />
         </motion.div>

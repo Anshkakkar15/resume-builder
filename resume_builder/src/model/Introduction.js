@@ -14,15 +14,15 @@ const IntroductionSchema = new mongoose.Schema({
     trim: true,
     required: [true, "First Name is required"],
   },
-  surname: {
+  lastName: {
     type: String,
     trim: true,
-    required: [true, "Surname is required"],
+    required: [true, "Last Name is required"],
   },
-  dateOfBirth: {
+  jobTitle: {
     type: String,
     trim: true,
-    required: [true, "Date of birth is required"],
+    required: [true, "Job Title is required"],
   },
   email: {
     type: String,
@@ -34,19 +34,14 @@ const IntroductionSchema = new mongoose.Schema({
     trim: true,
     required: [true, "Phone no is required"],
   },
-  country: {
+  address: {
     type: String,
     trim: true,
-    required: [true, "Country is required"],
+    required: [true, "Address is required"],
   },
-  pinCode: {
-    type: String,
-    trim: true,
-    required: [true, "Pin Code is required"],
-  },
+
   image: {
     type: mongoose.Schema.Types.Mixed,
-    required: [true, "Image is required"],
   },
 });
 
