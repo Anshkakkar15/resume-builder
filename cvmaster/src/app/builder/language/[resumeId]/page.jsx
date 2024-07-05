@@ -10,8 +10,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { backStep, nextStep } from "@/lib/getBuilderPage";
-import { useAddLanguagesMutation } from "@/redux/api";
-import { addLanguage, updateLanguage } from "@/redux/slices/LanguageSlice";
+import { useAddLanguagesMutation, useGetLanguagesQuery } from "@/redux/api";
+import {
+  addLanguage,
+  removeLanguage,
+  updateLanguage,
+} from "@/redux/slices/LanguageSlice";
 import { languageAndSkillSchema } from "@/schemas/languageAndSkillSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Plus, X } from "lucide-react";
@@ -27,7 +31,6 @@ export default function Language({ params }) {
   const dispatch = useDispatch();
   const languageInput = useSelector((state) => state.LanguageSlice.language);
   const userId = useSelector((state) => state.AuthSlice.userId);
-
   const [addLanguages, { isLoading, isError }] = useAddLanguagesMutation();
 
   const form = useForm({
@@ -42,12 +45,20 @@ export default function Language({ params }) {
     name: "languages",
   });
 
+  const getLanguages = useGetLanguagesQuery(
+    `userId=${userId}&resumeId=${params?.resumeId}`,
+    {
+      skip: !userId,
+    },
+  );
+
   useEffect(() => {
-    languageInput.map((elm) => {
-      fields?.length < languageInput.length &&
-        append({ language: elm?.language });
-    });
-  }, [languageInput, form]);
+    const languages = getLanguages?.data?.getLanguages?.languages?.map(
+      (lang) => ({ language: lang }),
+    );
+
+    form.reset({ languages });
+  }, [getLanguages?.isSuccess]);
 
   useImperativeHandle(formRef, () => ({
     submit: form.handleSubmit(handleAddLanguage),
@@ -121,7 +132,10 @@ export default function Language({ params }) {
                     />
                     <div
                       className="mt-3 cursor-pointer rounded-md bg-dark-blue p-2 text-white"
-                      onClick={() => remove(index)}
+                      onClick={() => {
+                        remove(index);
+                        dispatch(removeLanguage(index));
+                      }}
                     >
                       <X />
                     </div>

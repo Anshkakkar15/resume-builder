@@ -18,11 +18,7 @@ import {
 } from "@/redux/api";
 import { ButtonLoader } from "./loaders/ButtonLoader";
 import { updateSummary } from "@/redux/slices/SummarySlice";
-import {
-  addLanguage,
-  setLanguages,
-  updateLanguage,
-} from "@/redux/slices/LanguageSlice";
+import { setLanguages } from "@/redux/slices/LanguageSlice";
 
 export const BuilderLayout = forwardRef((props, ref) => {
   const { getAuth } = useAuth();
