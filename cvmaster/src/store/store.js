@@ -8,11 +8,11 @@ import { api } from "@/redux/api";
 
 export const store = configureStore({
   reducer: {
+    AuthSlice,
     IntroductionSlice,
     SummarySlice,
     LanguageSlice,
     ExperienceSlice,
-    AuthSlice,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>

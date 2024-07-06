@@ -8,11 +8,13 @@ export const ResumeComponent = forwardRef((props, ref) => {
   const introductionInputs = useSelector((state) => state.IntroductionSlice);
   const summaryInputs = useSelector((state) => state.SummarySlice);
   const languageInput = useSelector((state) => state.LanguageSlice.language);
+  const experienceInput = useSelector((state) => state.ExperienceSlice);
 
   const resumeDetails = {
     introduction: introductionInputs,
     summary: summaryInputs,
     languages: languageInput,
+    experience: experienceInput,
   };
   return (
     <div className="border-[15px] border-dark-blue">

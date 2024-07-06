@@ -21,27 +21,30 @@ import { experienceSchema } from "@/schemas/experinceSchema";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { backStep } from "@/lib/getBuilderPage";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  experienctState,
+  updateExperience,
+} from "@/redux/slices/ExperienceSlice";
 
-export default function Experience() {
-  const { resumeId } = useParams();
+export default function Experience({ params }) {
   const formRef = useRef();
   const router = useRouter();
   const searchParams = useSearchParams();
   const expid = searchParams.get("expid");
-  // console.log(atob(expid));
+  const dispatch = useDispatch();
 
   const [isChecked, setIsChecked] = useState(false);
   const experienceInputs = useSelector((state) => state.ExperienceSlice);
 
   const form = useForm({
-    defaultValues: experienceInputs,
+    defaultValues: experienctState,
     resolver: yupResolver(experienceSchema),
   });
 
   useEffect(() => {
     if (isChecked) {
-      form?.setValue("endDate", "");
+      form.setValue("endDate", "");
     }
   }, [isChecked, form]);
 
@@ -49,14 +52,23 @@ export default function Experience() {
     submit: form.handleSubmit(handleAddExperience),
   }));
 
+  const handleUpdateInputs = (field, value) => {
+    dispatch(
+      updateExperience({
+        index: experienceInputs.index,
+        value: { [field]: value },
+      }),
+    );
+  };
+
   const handleContinue = () => {
-    if (formRef?.current) {
-      formRef?.current?.submit();
+    if (formRef.current) {
+      formRef.current.submit();
     }
   };
 
   const handleAddExperience = (data) => {
-    router.push(`/builder/experience?id=${resumeId}`);
+    router.push(`/builder/experience?id=${params?.resumeId}`);
     console.log(data);
   };
 
@@ -66,9 +78,10 @@ export default function Experience() {
       description="Start with your most recent job first."
       handleContinue={handleContinue}
       handleBack={() => {
-        router?.push(`/builder/language/${resumeId}`);
+        router.push(`/builder/language/${params.resumeId}`);
         backStep("experience");
       }}
+      resumeId={params.resumeId}
     >
       <Form {...form}>
         <form>
@@ -80,7 +93,14 @@ export default function Experience() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>JOB TITLE</FormLabel>
-                    <Input {...field} placeholder="JOB TITLE" />
+                    <Input
+                      {...field}
+                      placeholder="JOB TITLE"
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleUpdateInputs(field.name, e.target.value);
+                      }}
+                    />
                     <FormMessage />
                   </FormItem>
                 )}
@@ -93,7 +113,14 @@ export default function Experience() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>EMPLOYER</FormLabel>
-                    <Input {...field} placeholder="EMPLOYER" />
+                    <Input
+                      {...field}
+                      placeholder="EMPLOYER"
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleUpdateInputs(field.name, e.target.value);
+                      }}
+                    />
                     <FormMessage />
                   </FormItem>
                 )}
@@ -108,7 +135,14 @@ export default function Experience() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>CITY</FormLabel>
-                    <Input {...field} placeholder="CITY" />
+                    <Input
+                      {...field}
+                      placeholder="CITY"
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleUpdateInputs(field.name, e.target.value);
+                      }}
+                    />
                     <FormMessage />
                   </FormItem>
                 )}
@@ -121,7 +155,14 @@ export default function Experience() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>COUNTRY</FormLabel>
-                    <Input {...field} placeholder="COUNTRY" />
+                    <Input
+                      {...field}
+                      placeholder="COUNTRY"
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleUpdateInputs(field.name, e.target.value);
+                      }}
+                    />
                     <FormMessage />
                   </FormItem>
                 )}
@@ -138,7 +179,13 @@ export default function Experience() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>START DATE</FormLabel>
-                    <DatePicker date={field.value} onChange={field.onChange} />
+                    <DatePicker
+                      date={field.value}
+                      onChange={(date) => {
+                        field.onChange(date);
+                        handleUpdateInputs(field.name, date);
+                      }}
+                    />
                     <FormMessage />
                   </FormItem>
                 )}
@@ -154,7 +201,10 @@ export default function Experience() {
                       <FormLabel>END DATE</FormLabel>
                       <DatePicker
                         date={field.value}
-                        onChange={field.onChange}
+                        onChange={(date) => {
+                          field.onChange(date);
+                          handleUpdateInputs(field.name, date);
+                        }}
                       />
                       <FormMessage />
                     </FormItem>
@@ -172,6 +222,7 @@ export default function Experience() {
                         onCheckedChange={(checked) => {
                           setIsChecked(checked);
                           field.onChange(checked);
+                          handleUpdateInputs(field.name, checked);
                         }}
                       />
                     </FormControl>
@@ -188,7 +239,13 @@ export default function Experience() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>RESPONSIBILITIES</FormLabel>
-                  <TextEditor onChange={field.onChange} defaultValue={""} />
+                  <TextEditor
+                    onChange={(value) => {
+                      field.onChange(value);
+                      handleUpdateInputs(field.name, value);
+                    }}
+                    defaultValue={field.value}
+                  />
                   <FormMessage />
                 </FormItem>
               )}

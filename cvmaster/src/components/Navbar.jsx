@@ -56,14 +56,6 @@ export const Navbar = () => {
           </div>
           <div>
             <ul className="flex items-center gap-2 sm:gap-5 md:gap-7 xl:gap-9">
-              <li>
-                <a
-                  href="#templates"
-                  className="text-nowrap font-popins text-sm font-medium text-dark-blue sm:text-base 2xl:text-lg"
-                >
-                  Craft Your Resume
-                </a>
-              </li>
               {userId?.userId ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

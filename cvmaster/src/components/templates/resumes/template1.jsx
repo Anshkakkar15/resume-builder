@@ -5,6 +5,7 @@ import {
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
+import dayjs from "dayjs";
 
 export const Template1 = ({ resume }) => {
   return (
@@ -88,7 +89,7 @@ export const Template1 = ({ resume }) => {
           layout="1-column"
           lineColor="#664b10"
         >
-          {new Array(2).fill(true).map((elm, i) => {
+          {resume?.experience?.experienceFields?.map((experience, i) => {
             return (
               <VerticalTimelineElement
                 key={i}
@@ -102,13 +103,16 @@ export const Template1 = ({ resume }) => {
               >
                 <div className="mt-0 flex items-center justify-between">
                   <span className="font-popins text-base font-semibold text-[#171717]">
-                    Graphic Designer
+                    {experience?.jobTitle}
                   </span>
                   <span className="font-popins text-xs font-semibold italic text-[#171717]">
-                    May-2015-June-2017
+                    {dayjs(experience?.startDate).format("MMMM - YYYY")} -{" "}
+                    {experience?.present
+                      ? "Present"
+                      : dayjs(experience?.lastDate).format("MMMM - YYYY")}
                   </span>
                 </div>
-                <ul className="ml-8 mt-2 flex list-disc flex-col gap-y-2">
+                {/* <ul className="ml-8 mt-2 flex list-disc flex-col gap-y-2">
                   <li className="font-popins text-xs text-[#171717]">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Hic soluta beatae, modi cumque aspernatur nulla
@@ -117,7 +121,12 @@ export const Template1 = ({ resume }) => {
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Hic soluta beatae, modi cumque aspernatur nulla
                   </li>
-                </ul>
+                </ul> */}
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: experience?.responsibilities,
+                  }}
+                />
               </VerticalTimelineElement>
             );
           })}
