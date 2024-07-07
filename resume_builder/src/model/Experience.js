@@ -37,7 +37,10 @@ const experienceSchema = new mongoose.Schema({
   endDate: {
     type: String,
     trim: true,
-    required: [true, "End Date is required"],
+  },
+  isPresent: {
+    type: Boolean,
+    default: false,
   },
   responsibilities: {
     type: String,

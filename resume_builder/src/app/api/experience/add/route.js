@@ -15,6 +15,7 @@ export async function POST(request) {
       startDate,
       endDate,
       responsibilities,
+      isPresent,
     } = await request.json();
 
     if (!userId) return sessionError();
@@ -31,12 +32,13 @@ export async function POST(request) {
       startDate,
       endDate,
       responsibilities,
+      isPresent,
     });
 
     await newExperience.save();
 
     return Response.json(
-      { message: "Details saved successfully", success: true },
+      { message: "Experience Added", success: true },
       { status: 200 }
     );
   } catch (error) {

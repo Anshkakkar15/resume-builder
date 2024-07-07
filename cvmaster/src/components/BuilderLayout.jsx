@@ -12,6 +12,7 @@ import { useAuth } from "@/lib/useAuth";
 import { updateUserAuth } from "@/redux/slices/AuthSlice";
 import { updateIntroduction } from "@/redux/slices/IntroductionSlice";
 import {
+  useGetExperienceListQuery,
   useGetIntroductionQuery,
   useGetLanguagesQuery,
   useGetSummaryQuery,
@@ -19,6 +20,10 @@ import {
 import { ButtonLoader } from "./loaders/ButtonLoader";
 import { updateSummary } from "@/redux/slices/SummarySlice";
 import { setLanguages } from "@/redux/slices/LanguageSlice";
+import {
+  setExperienceField,
+  updateIndex,
+} from "@/redux/slices/ExperienceSlice";
 
 export const BuilderLayout = forwardRef((props, ref) => {
   const { getAuth } = useAuth();
@@ -44,6 +49,13 @@ export const BuilderLayout = forwardRef((props, ref) => {
   );
 
   const getLanguages = useGetLanguagesQuery(
+    `userId=${userId}&resumeId=${props?.resumeId}`,
+    {
+      skip: !userId,
+    },
+  );
+
+  const getExperienceList = useGetExperienceListQuery(
     `userId=${userId}&resumeId=${props?.resumeId}`,
     {
       skip: !userId,
@@ -89,6 +101,11 @@ export const BuilderLayout = forwardRef((props, ref) => {
       );
     }
   }, [userToken, userDetails]);
+
+  useEffect(() => {
+    dispatch(setExperienceField(getExperienceList?.data?.getUserExperience));
+    dispatch(updateIndex(getExperienceList?.data?.getUserExperience.length));
+  }, [getExperienceList?.data?.getUserExperience]);
 
   return (
     <>

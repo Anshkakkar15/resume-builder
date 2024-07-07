@@ -15,7 +15,7 @@ const experienceFields = [experienctState];
 
 const initialState = {
   experienceFields: experienceFields,
-  index: experienceFields.length - 1,
+  index: 0,
 };
 
 const experienceSlice = createSlice({
@@ -38,12 +38,19 @@ const experienceSlice = createSlice({
     },
 
     setExperienceField: (state, action) => {
-      const { index, data } = action.payload;
-      state.experienceFields[index] = data;
+      state.experienceFields = action.payload;
+    },
+    updateIndex: (state, action) => {
+      state.index = action.payload;
     },
   },
 });
 
-export const { updateExperience, setExperienceField, addExperience } =
-  experienceSlice.actions;
+export const {
+  updateExperience,
+  setExperienceField,
+  addExperience,
+  updateIndex,
+} = experienceSlice.actions;
+
 export default experienceSlice.reducer;

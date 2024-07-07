@@ -1,8 +1,10 @@
 "use client";
 
 import { BuilderLayout } from "@/components/BuilderLayout";
+import { useToast } from "@/components/ui/use-toast";
 import { nextStep } from "@/lib/getBuilderPage";
-import { addExperience } from "@/redux/slices/ExperienceSlice";
+import { useDeleteExperienceMutation } from "@/redux/api";
+import { addExperience, updateIndex } from "@/redux/slices/ExperienceSlice";
 import dayjs from "dayjs";
 import { Pencil, Plus, Trash } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -13,11 +15,38 @@ export default function Experience() {
   const searchParams = useSearchParams();
   const resumeId = searchParams.get("id");
   const dispatch = useDispatch();
+  const { toast } = useToast();
+
+  const [deleteExperience, { isLoading, isError }] =
+    useDeleteExperienceMutation();
+
+  const userId = useSelector((state) => state.AuthSlice.userId);
 
   const experienceInputs = useSelector((state) => state.ExperienceSlice);
 
-  const handleEditExperience = (id) => {
-    router.push(`/builder/experience/${resumeId}?expid=${id}`);
+  const handleEditExperience = (id, index) => {
+    router.push(`/builder/experience/${resumeId}?expid=${id}&epxind=${index}`);
+  };
+
+  const handleDeleteExperience = async (id) => {
+    const response = await deleteExperience({
+      userId,
+      resumeId,
+      id,
+    });
+    if (response?.data?.success) {
+      toast({
+        title: response?.data?.message,
+      });
+    }
+    if (isError) {
+      toast({
+        variant: "destructive",
+        title: response?.error?.data?.message
+          ? response?.error?.data?.message
+          : "Error while submitting details",
+      });
+    }
   };
 
   return (
@@ -28,10 +57,10 @@ export default function Experience() {
         router.push(`/builder/education/${resumeId}`);
         nextStep("education");
       }}
+      resumeId={resumeId}
     >
       {experienceInputs.experienceFields?.length >= 1
         ? experienceInputs.experienceFields?.map((experience, i) => {
-            console.log(experience);
             return (
               <div
                 className="rounded-md border-2 border-[#F9FAFB] bg-[#F9FAFB] p-5"
@@ -44,22 +73,27 @@ export default function Experience() {
                     </h3>
                     <div className="flex items-center gap-3">
                       <span
-                        onClick={() => handleEditExperience(experience.id)}
+                        onClick={() => {
+                          handleEditExperience(experience._id, i);
+                        }}
                         className="cursor-pointer text-sm text-dark-blue transition-all duration-100 hover:text-green-700"
                       >
                         <Pencil width={17} height={17} />
                       </span>
-                      <span className="cursor-pointer text-sm text-dark-blue transition-all duration-100 hover:text-red-700">
+                      <span
+                        onClick={() => handleDeleteExperience(experience?._id)}
+                        className="cursor-pointer text-sm text-dark-blue transition-all duration-100 hover:text-red-700"
+                      >
                         <Trash width={17} height={17} />
                       </span>
                     </div>
                   </div>
                   <p className="font-popins text-sm text-dark-blue">
                     {experience.city} {experience.country} |{" "}
-                    {dayjs(experience.startDate).format("YYYY - MMMM")} -{" "}
-                    {experience.present
+                    {dayjs(experience.startDate).format("MMMM - YYYY")} -{" "}
+                    {experience.isPresent
                       ? "Present"
-                      : dayjs(experience.lastDate).format("YYYY-MMMM")}
+                      : dayjs(experience.lastDate).format("MMMM - YYYY")}
                   </p>
                   <div
                     dangerouslySetInnerHTML={{

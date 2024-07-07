@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_BASE_API_URL }),
-  tagTypes: ["introduction", "summary", "languages"],
+  tagTypes: ["introduction", "summary", "languages", "experience"],
   endpoints: (builder) => ({
     signUp: builder.mutation({
       query: (body) => ({
@@ -64,6 +64,43 @@ export const api = createApi({
       }),
       providesTags: ["languages"],
     }),
+    addExperienceDetails: builder.mutation({
+      query: (body) => ({
+        url: "/experience/add",
+        method: "POST",
+        body: body,
+      }),
+      invalidatesTags: ["experience"],
+    }),
+    getExperienceList: builder.query({
+      query: (query) => ({
+        url: `/experience/get?${query}`,
+        method: "GET",
+      }),
+      providesTags: ["experience"],
+    }),
+    getSingleExperience: builder.query({
+      query: (query) => ({
+        url: `/experience/single?${query}`,
+        method: "GET",
+      }),
+    }),
+    updateExperienceDetails: builder.mutation({
+      query: (body) => ({
+        url: "/experience/update",
+        method: "POST",
+        body: body,
+      }),
+      invalidatesTags: ["experience"],
+    }),
+    deleteExperience: builder.mutation({
+      query: (body) => ({
+        url: `/experience/delete`,
+        method: "POST",
+        body: body,
+      }),
+      invalidatesTags: ["experience"],
+    }),
   }),
 });
 
@@ -76,4 +113,9 @@ export const {
   useGetSummaryQuery,
   useAddLanguagesMutation,
   useGetLanguagesQuery,
+  useAddExperienceDetailsMutation,
+  useGetExperienceListQuery,
+  useDeleteExperienceMutation,
+  useGetSingleExperienceQuery,
+  useUpdateExperienceDetailsMutation,
 } = api;

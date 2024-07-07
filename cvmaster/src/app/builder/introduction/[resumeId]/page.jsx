@@ -72,7 +72,6 @@ export default function Introduction({ params }) {
 
   const handleAddIntroduction = async () => {
     const formData = new FormData();
-    console.log(introductionInputs);
     formData.append("userId", userId);
     formData.append("resumeId", params?.resumeId);
     formData.append("firstName", introductionInputs.firstName);

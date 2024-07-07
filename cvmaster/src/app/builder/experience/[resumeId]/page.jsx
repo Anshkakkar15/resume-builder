@@ -26,21 +26,65 @@ import {
   experienctState,
   updateExperience,
 } from "@/redux/slices/ExperienceSlice";
+import {
+  useAddExperienceDetailsMutation,
+  useGetSingleExperienceQuery,
+  useUpdateExperienceDetailsMutation,
+} from "@/redux/api";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function Experience({ params }) {
   const formRef = useRef();
   const router = useRouter();
+  const { toast } = useToast();
   const searchParams = useSearchParams();
   const expid = searchParams.get("expid");
+  const expIndex = searchParams.get("epxind");
   const dispatch = useDispatch();
-
   const [isChecked, setIsChecked] = useState(false);
+  const [addExperience, { isLoading, isError }] =
+    useAddExperienceDetailsMutation();
+
+  const [editExperience] = useUpdateExperienceDetailsMutation();
+
+  const userId = useSelector((state) => state.AuthSlice.userId);
   const experienceInputs = useSelector((state) => state.ExperienceSlice);
+
+  const getSingleExperience = useGetSingleExperienceQuery(
+    `id=${expid}&userId=${userId}&resumeId=${params?.resumeId}`,
+    {
+      skip: !expid,
+      refetchOnMountOrArgChange: true,
+    },
+  );
 
   const form = useForm({
     defaultValues: experienctState,
     resolver: yupResolver(experienceSchema),
   });
+
+  useEffect(() => {
+    if (getSingleExperience?.currentData?.getSingleUserExperience) {
+      const defaultValues = {};
+      defaultValues.jobTitle =
+        getSingleExperience.currentData.getSingleUserExperience.jobTitle;
+      defaultValues.employer =
+        getSingleExperience.currentData.getSingleUserExperience.employer;
+      defaultValues.city =
+        getSingleExperience.currentData.getSingleUserExperience.city;
+      defaultValues.country =
+        getSingleExperience.currentData.getSingleUserExperience.country;
+      defaultValues.startDate =
+        getSingleExperience.currentData.getSingleUserExperience.startDate;
+      defaultValues.endDate =
+        getSingleExperience.currentData.getSingleUserExperience.endDate;
+      defaultValues.responsibilities =
+        getSingleExperience.currentData.getSingleUserExperience.responsibilities;
+      defaultValues.isPresent =
+        getSingleExperience.currentData.getSingleUserExperience.present;
+      form.reset(defaultValues);
+    }
+  }, [getSingleExperience?.currentData?.getSingleUserExperience]);
 
   useEffect(() => {
     if (isChecked) {
@@ -55,7 +99,7 @@ export default function Experience({ params }) {
   const handleUpdateInputs = (field, value) => {
     dispatch(
       updateExperience({
-        index: experienceInputs.index,
+        index: expIndex ? expIndex : experienceInputs.index,
         value: { [field]: value },
       }),
     );
@@ -67,9 +111,53 @@ export default function Experience({ params }) {
     }
   };
 
-  const handleAddExperience = (data) => {
-    router.push(`/builder/experience?id=${params?.resumeId}`);
-    console.log(data);
+  const handleAddExperience = async (data) => {
+    const expObj = {
+      userId: userId,
+      resumeId: params.resumeId,
+      jobTitle: data.jobTitle,
+      employer: data.employer,
+      city: data.city,
+      country: data.country,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      responsibilities: data.responsibilities,
+      isPresent: data.present,
+    };
+    if (expid) {
+      expObj["id"] = expid;
+      const response = await editExperience(expObj);
+      if (response?.data?.success) {
+        toast({
+          title: response?.data?.message,
+        });
+        router.push(`/builder/experience?id=${params?.resumeId}`);
+      }
+      if (isError) {
+        toast({
+          variant: "destructive",
+          title: response?.error?.data?.message
+            ? response?.error?.data?.message
+            : "Error while submitting details",
+        });
+      }
+    } else {
+      const response = await addExperience(expObj);
+      if (response?.data?.success) {
+        toast({
+          title: response?.data?.message,
+        });
+        router.push(`/builder/experience?id=${params?.resumeId}`);
+      }
+      if (isError) {
+        toast({
+          variant: "destructive",
+          title: response?.error?.data?.message
+            ? response?.error?.data?.message
+            : "Error while submitting details",
+        });
+      }
+    }
   };
 
   return (
@@ -82,6 +170,7 @@ export default function Experience({ params }) {
         backStep("experience");
       }}
       resumeId={params.resumeId}
+      isLoading={isLoading}
     >
       <Form {...form}>
         <form>

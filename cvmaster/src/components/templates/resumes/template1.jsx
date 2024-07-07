@@ -107,7 +107,7 @@ export const Template1 = ({ resume }) => {
                   </span>
                   <span className="font-popins text-xs font-semibold italic text-[#171717]">
                     {dayjs(experience?.startDate).format("MMMM - YYYY")} -{" "}
-                    {experience?.present
+                    {experience?.isPresent
                       ? "Present"
                       : dayjs(experience?.lastDate).format("MMMM - YYYY")}
                   </span>

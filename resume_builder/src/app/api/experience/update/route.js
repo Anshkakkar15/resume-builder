@@ -16,6 +16,7 @@ export async function POST(request) {
       startDate,
       endDate,
       responsibilities,
+      isPresent,
     } = await request.json();
 
     if (!userId) return sessionError();
@@ -36,6 +37,7 @@ export async function POST(request) {
         startDate,
         endDate,
         responsibilities,
+        isPresent,
       },
       {
         new: true,
