@@ -15,6 +15,7 @@ import {
   useGetExperienceListQuery,
   useGetIntroductionQuery,
   useGetLanguagesQuery,
+  useGetSkillsQuery,
   useGetSummaryQuery,
 } from "@/redux/api";
 import { ButtonLoader } from "./loaders/ButtonLoader";
@@ -24,6 +25,7 @@ import {
   setExperienceField,
   updateIndex,
 } from "@/redux/slices/ExperienceSlice";
+import { setSkills } from "@/redux/slices/SkillsSlice";
 
 export const BuilderLayout = forwardRef((props, ref) => {
   const { getAuth } = useAuth();
@@ -56,6 +58,13 @@ export const BuilderLayout = forwardRef((props, ref) => {
   );
 
   const getExperienceList = useGetExperienceListQuery(
+    `userId=${userId}&resumeId=${props?.resumeId}`,
+    {
+      skip: !userId,
+    },
+  );
+
+  const getSkillsList = useGetSkillsQuery(
     `userId=${userId}&resumeId=${props?.resumeId}`,
     {
       skip: !userId,
@@ -106,6 +115,19 @@ export const BuilderLayout = forwardRef((props, ref) => {
     dispatch(setExperienceField(getExperienceList?.data?.getUserExperience));
     dispatch(updateIndex(getExperienceList?.data?.getUserExperience.length));
   }, [getExperienceList?.data?.getUserExperience]);
+
+  useEffect(() => {
+    // skills
+    if (getSkillsList?.isSuccess && getSkillsList?.data?.getSkills) {
+      const languages = getSkillsList?.data?.getSkills?.skills?.map(
+        (skill) => ({
+          language: skill,
+        }),
+      );
+
+      dispatch(setSkills(languages));
+    }
+  }, [getSkillsList?.isSuccess, dispatch]);
 
   return (
     <>

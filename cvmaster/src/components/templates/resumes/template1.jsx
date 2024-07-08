@@ -101,28 +101,32 @@ export const Template1 = ({ resume }) => {
                   height: "20px",
                 }}
               >
-                <div className="mt-0 flex items-center justify-between">
-                  <span className="font-popins text-base font-semibold text-[#171717]">
-                    {experience?.jobTitle}
-                  </span>
+                <div className="mt-0 flex justify-between">
+                  <div className="flex flex-col space-y-2">
+                    <span className="font-popins text-base font-semibold text-[#171717]">
+                      {experience?.jobTitle}
+                    </span>
+                    <span className="font-popins font-normal text-[#171717]">
+                      {experience?.employer} {experience?.city && ","}{" "}
+                      <span className="italic">
+                        {experience?.city}
+                        {experience?.country && ","} {experience?.country}
+                      </span>
+                    </span>
+                  </div>
                   <span className="font-popins text-xs font-semibold italic text-[#171717]">
-                    {dayjs(experience?.startDate).format("MMMM - YYYY")} -{" "}
+                    {experience?.startDate &&
+                      dayjs(experience?.startDate).format("MMMM YYYY")}{" "}
+                    -{" "}
                     {experience?.isPresent
                       ? "Present"
-                      : dayjs(experience?.lastDate).format("MMMM - YYYY")}
+                      : experience?.endDate &&
+                        dayjs(experience?.endDate).format("MMMM YYYY")}
                   </span>
                 </div>
-                {/* <ul className="ml-8 mt-2 flex list-disc flex-col gap-y-2">
-                  <li className="font-popins text-xs text-[#171717]">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Hic soluta beatae, modi cumque aspernatur nulla
-                  </li>
-                  <li className="font-popins text-xs text-[#171717]">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Hic soluta beatae, modi cumque aspernatur nulla
-                  </li>
-                </ul> */}
+
                 <div
+                  className="text_editor_design mt-2 font-popins"
                   dangerouslySetInnerHTML={{
                     __html: experience?.responsibilities,
                   }}
@@ -190,25 +194,18 @@ export const Template1 = ({ resume }) => {
           </h2>
           <div className="w-full border-b-[1px] border-[#664b10]" />
         </div>
-        <ul className="ml-9 flex list-disc flex-wrap justify-center gap-y-3">
-          <li className="basis-1/2 text-sm font-semibold text-[#171717]">
-            Html
-          </li>
-          <li className="basis-1/2 text-sm font-semibold text-[#171717]">
-            Css
-          </li>
-          <li className="basis-1/2 text-sm font-semibold text-[#171717]">
-            Javascipt
-          </li>
-          <li className="basis-1/2 text-sm font-semibold text-[#171717]">
-            React
-          </li>
-          <li className="basis-1/2 text-sm font-semibold text-[#171717]">
-            Next
-          </li>
-          <li className="basis-1/2 text-sm font-semibold text-[#171717]">
-            Angular
-          </li>
+        <ul className="ml-9 flex list-disc flex-wrap gap-y-3">
+          {resume.skills?.length >= 1 &&
+            resume.skills.map((skills, i) => {
+              return (
+                <li
+                  key={i}
+                  className="basis-1/2 text-sm font-semibold text-[#171717]"
+                >
+                  {skills.language}
+                </li>
+              );
+            })}
         </ul>
       </div>
       <div className="pt-5">

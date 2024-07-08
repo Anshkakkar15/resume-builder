@@ -23,6 +23,7 @@ export default function Education() {
       handleContinue={() => {
         router.push(`/builder/skills/${resumeId}`), nextStep("skills");
       }}
+      resumeId={resumeId}
     >
       <div className="rounded-md border-2 border-[#F9FAFB] bg-[#F9FAFB] p-5">
         <div className="flex flex-col gap-y-3">

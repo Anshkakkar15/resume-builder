@@ -3,7 +3,14 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_BASE_API_URL }),
-  tagTypes: ["introduction", "summary", "languages", "experience"],
+  tagTypes: [
+    "introduction",
+    "summary",
+    "languages",
+    "experience",
+    "education",
+    "skills",
+  ],
   endpoints: (builder) => ({
     signUp: builder.mutation({
       query: (body) => ({
@@ -101,6 +108,21 @@ export const api = createApi({
       }),
       invalidatesTags: ["experience"],
     }),
+    addSkills: builder.mutation({
+      query: (body) => ({
+        url: "/skills",
+        method: "POST",
+        body: body,
+      }),
+      invalidatesTags: ["skills"],
+    }),
+    getSkills: builder.query({
+      query: (query) => ({
+        url: `/skills?${query}`,
+        method: "GET",
+      }),
+      providesTags: ["skills"],
+    }),
   }),
 });
 
@@ -118,4 +140,6 @@ export const {
   useDeleteExperienceMutation,
   useGetSingleExperienceQuery,
   useUpdateExperienceDetailsMutation,
+  useAddSkillsMutation,
+  useGetSkillsQuery,
 } = api;

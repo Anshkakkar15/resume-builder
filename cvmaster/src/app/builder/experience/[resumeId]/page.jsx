@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { BuilderLayout } from "@/components/BuilderLayout";
 import { useForm } from "react-hook-form";
 import { useEffect, useImperativeHandle, useRef, useState } from "react";
@@ -81,7 +81,10 @@ export default function Experience({ params }) {
       defaultValues.responsibilities =
         getSingleExperience.currentData.getSingleUserExperience.responsibilities;
       defaultValues.isPresent =
-        getSingleExperience.currentData.getSingleUserExperience.present;
+        getSingleExperience.currentData.getSingleUserExperience.isPresent;
+      setIsChecked(
+        getSingleExperience.currentData.getSingleUserExperience.isPresent,
+      );
       form.reset(defaultValues);
     }
   }, [getSingleExperience?.currentData?.getSingleUserExperience]);
@@ -122,7 +125,7 @@ export default function Experience({ params }) {
       startDate: data.startDate,
       endDate: data.endDate,
       responsibilities: data.responsibilities,
-      isPresent: data.present,
+      isPresent: data.isPresent,
     };
     if (expid) {
       expObj["id"] = expid;
@@ -302,7 +305,7 @@ export default function Experience({ params }) {
               )}
               <FormField
                 control={form.control}
-                name="present"
+                name="isPresent"
                 render={({ field }) => (
                   <FormItem className={cn("mt-5 flex items-center gap-3")}>
                     <FormControl>
@@ -321,7 +324,7 @@ export default function Experience({ params }) {
               />
             </div>
           </div>
-          <div className="mt-3">
+          <div cla ssName="mt-3">
             <FormField
               control={form.control}
               name="responsibilities"
@@ -329,11 +332,18 @@ export default function Experience({ params }) {
                 <FormItem>
                   <FormLabel>RESPONSIBILITIES</FormLabel>
                   <TextEditor
+                    control={form.control}
                     onChange={(value) => {
                       field.onChange(value);
                       handleUpdateInputs(field.name, value);
                     }}
-                    defaultValue={field.value}
+                    defaultValues={
+                      getSingleExperience?.currentData?.getSingleUserExperience
+                        .responsibilities
+                        ? getSingleExperience?.currentData
+                            .getSingleUserExperience?.responsibilities
+                        : ""
+                    }
                   />
                   <FormMessage />
                 </FormItem>
