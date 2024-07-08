@@ -101,10 +101,16 @@ export const Template1 = ({ resume }) => {
                   height: "20px",
                 }}
               >
-                <div className="mt-0 flex items-center justify-between">
-                  <span className="font-popins text-base font-semibold text-[#171717]">
-                    {experience?.jobTitle}
-                  </span>
+                <div className="mt-0 flex justify-between">
+                  <div className="flex flex-col gap-y-2">
+                    <span className="font-popins text-base font-semibold text-[#171717]">
+                      {experience?.jobTitle}
+                    </span>
+                    <span className="text-sm font-normal italic text-[#171717]">
+                      {experience?.employer} ,{experience?.city} ,
+                      {experience?.country}
+                    </span>
+                  </div>
                   <span className="font-popins text-xs font-semibold italic text-[#171717]">
                     {dayjs(experience?.startDate).format("MMMM - YYYY")} -{" "}
                     {experience?.isPresent

@@ -4,7 +4,6 @@ import { AUTH_ID_KEY } from "./constants";
 export function middleware(request) {
   let token = request.cookies.get(AUTH_ID_KEY);
   const url = request.nextUrl;
-  console.log(token);
   if (
     token &&
     (url.pathname.startsWith("/sign-in") || url.pathname.startsWith("/sign-up"))
