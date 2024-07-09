@@ -6,7 +6,7 @@ export const experienceSchema = yup.object().shape({
   city: yup.string().required("Field is required"),
   country: yup.string().required("Field is required"),
   startDate: yup.string().required("Field is required"),
-  endDate: yup.string().when("present", {
+  endDate: yup.string().when("isPresent", {
     is: (value) => value === false,
     then: () => yup.string().required("Field is required"),
     otherwise: () => yup.string().notRequired(),

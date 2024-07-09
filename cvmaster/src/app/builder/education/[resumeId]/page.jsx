@@ -66,6 +66,7 @@ export default function AddEducation() {
         backStep("education");
       }}
       handleContinue={handleContinue}
+      resumeId={resumeId}
     >
       <Form {...form} className="space-y-6">
         <form>

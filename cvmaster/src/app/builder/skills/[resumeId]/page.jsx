@@ -8,20 +8,34 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { backStep } from "@/lib/getBuilderPage";
+import { useAddSkillsMutation, useGetSkillsQuery } from "@/redux/api";
+import {
+  addSkills,
+  removeSkills,
+  updateSkills,
+} from "@/redux/slices/SkillsSlice";
 import { languageAndSkillSchema } from "@/schemas/languageAndSkillSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Plus, X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useImperativeHandle, useRef } from "react";
+import { useEffect, useImperativeHandle, useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 export default function Skills() {
   const router = useRouter();
+  const { toast } = useToast();
   const { resumeId } = useParams();
   const formRef = useRef();
+  const dispatch = useDispatch();
+  const skillInput = useSelector((state) => state.SkillsSlice.skills);
+  const userId = useSelector((state) => state.AuthSlice.userId);
+  const [addSkillsList, { isLoading, isError }] = useAddSkillsMutation();
+
   const form = useForm({
     defaultValues: {
-      languages: [{ language: "" }],
+      languages: skillInput,
     },
     resolver: yupResolver(languageAndSkillSchema),
   });
@@ -30,6 +44,21 @@ export default function Skills() {
     control: form.control,
     name: "languages",
   });
+
+  const getAllSkills = useGetSkillsQuery(
+    `userId=${userId}&resumeId=${resumeId}`,
+    {
+      skip: !userId,
+    },
+  );
+
+  useEffect(() => {
+    const languages = getAllSkills?.data?.getSkills?.skills?.map((skill) => ({
+      language: skill,
+    }));
+
+    form.reset({ languages });
+  }, [getAllSkills?.isSuccess]);
 
   useImperativeHandle(formRef, () => ({
     submit: form.handleSubmit(handleAddSkills),
@@ -40,9 +69,26 @@ export default function Skills() {
       formRef.current.submit();
     }
   };
-  const handleAddSkills = (data) => {
-    console.log(data);
-    router.push(`/builder/download/${resumeId}`);
+  const handleAddSkills = async (data) => {
+    const arr = data.languages.map((lang) => lang.language);
+    const response = await addSkillsList({
+      userId,
+      resumeId,
+      skills: arr,
+    });
+    if (response?.data?.message) {
+      router.push(`/builder/download/${resumeId}`);
+      toast({
+        title: response?.data?.message,
+      });
+    } else if (isError) {
+      toast({
+        variant: "destructive",
+        title: response?.error?.data?.message
+          ? response?.error?.data?.message
+          : "Error while submitting details",
+      });
+    }
   };
 
   return (
@@ -54,6 +100,8 @@ export default function Skills() {
         backStep("skills");
       }}
       handleContinue={handleContinue}
+      isLoading={isLoading}
+      resumeId={resumeId}
     >
       <Form {...form}>
         <form>
@@ -66,10 +114,23 @@ export default function Skills() {
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center gap-4">
-                    <Input {...field} placeholder="SKILLS" className="mt-3" />
+                    <Input
+                      {...field}
+                      placeholder="SKILLS"
+                      className="mt-3"
+                      onChange={(e) => {
+                        field.onChange(e);
+                        dispatch(
+                          updateSkills({ index, value: e.target.value }),
+                        );
+                      }}
+                    />
                     <div
                       className="mt-3 cursor-pointer rounded-md bg-dark-blue p-2 text-white"
-                      onClick={() => remove(index)}
+                      onClick={() => {
+                        remove(index);
+                        dispatch(removeSkills(index));
+                      }}
                     >
                       <X />
                     </div>
@@ -80,7 +141,10 @@ export default function Skills() {
             />
           ))}
           <div
-            onClick={() => append({ language: "" })}
+            onClick={() => {
+              append({ language: "" });
+              dispatch(addSkills());
+            }}
             className="mt-5 flex cursor-pointer items-center gap-2"
           >
             <Plus /> Add More

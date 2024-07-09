@@ -30,6 +30,7 @@ export default function Download() {
       ref={pdfRef}
       handleContinue={handleDownloadPdf}
       handleBack={() => router.push(`/builder/skills/${resumeid}`)}
+      resumeId={resumeid}
     />
   );
 }

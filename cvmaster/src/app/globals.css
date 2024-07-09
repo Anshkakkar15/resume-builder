@@ -168,6 +168,7 @@ input[type="number"] {
 .vertical-timeline {
   padding: 0 !important;
 }
+
 .tox-menubar,
 .tox-statusbar {
   display: none !important;
@@ -186,6 +187,28 @@ input[type="number"] {
 .tox-editor-header {
   box-shadow: none !important;
 }
+
 .tox .tox-edit-area::before {
   border: none !important;
+}
+
+.text_editor_design p {
+  font-size: 13px !important;
+  color: #0d1f2d;
+  margin: 0 !important;
+  word-break: break-word;
+}
+
+
+.text_editor_design ul,
+.text_editor_design ol {
+  list-style: disc;
+  margin-left: 17px !important;
+}
+
+.text_editor_design ul li,
+.text_editor_design ol li {
+  font-size: 13px !important;
+  color: #0d1f2d;
+  word-break: break-word;
 }
