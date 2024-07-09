@@ -123,6 +123,43 @@ export const api = createApi({
       }),
       providesTags: ["skills"],
     }),
+    addEducationDetails: builder.mutation({
+      query: (body) => ({
+        url: "/education/add",
+        method: "POST",
+        body: body,
+      }),
+      invalidatesTags: ["education"],
+    }),
+    getEducationList: builder.query({
+      query: (query) => ({
+        url: `/education/get?${query}`,
+        method: "GET",
+      }),
+      providesTags: ["education"],
+    }),
+    deleteEducation: builder.mutation({
+      query: (body) => ({
+        url: `/education/delete`,
+        method: "POST",
+        body: body,
+      }),
+      invalidatesTags: ["education"],
+    }),
+    getSingleEducation: builder.query({
+      query: (query) => ({
+        url: `/education/single?${query}`,
+        method: "GET",
+      }),
+    }),
+    updateEducationDetails: builder.mutation({
+      query: (body) => ({
+        url: "/education/update",
+        method: "POST",
+        body: body,
+      }),
+      invalidatesTags: ["education"],
+    }),
   }),
 });
 
@@ -142,4 +179,9 @@ export const {
   useUpdateExperienceDetailsMutation,
   useAddSkillsMutation,
   useGetSkillsQuery,
+  useAddEducationDetailsMutation,
+  useGetEducationListQuery,
+  useDeleteEducationMutation,
+  useGetSingleEducationQuery,
+  useUpdateEducationDetailsMutation,
 } = api;

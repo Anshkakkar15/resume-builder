@@ -54,8 +54,12 @@ export default function Experience() {
       heading={"Review your experience"}
       handleBack={() => router.push(`/builder/experience/${resumeId}`)}
       handleContinue={() => {
-        router.push(`/builder/education/${resumeId}`);
-        nextStep("education");
+        if (experienceInputs?.experienceFields?.length >= 1) {
+          router.push(`/builder/education/${resumeId}`);
+          nextStep("education");
+        } else {
+          router.push(`/builder/experience/${resumeId}`);
+        }
       }}
       resumeId={resumeId}
     >

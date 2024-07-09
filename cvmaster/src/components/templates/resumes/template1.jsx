@@ -102,15 +102,6 @@ export const Template1 = ({ resume }) => {
                 }}
               >
                 <div className="mt-0 flex justify-between">
-<<<<<<< HEAD
-                  <div className="flex flex-col gap-y-2">
-                    <span className="font-popins text-base font-semibold text-[#171717]">
-                      {experience?.jobTitle}
-                    </span>
-                    <span className="text-sm font-normal italic text-[#171717]">
-                      {experience?.employer} ,{experience?.city} ,
-                      {experience?.country}
-=======
                   <div className="flex flex-col space-y-2">
                     <span className="font-popins text-base font-semibold text-[#171717]">
                       {experience?.jobTitle}
@@ -121,7 +112,6 @@ export const Template1 = ({ resume }) => {
                         {experience?.city}
                         {experience?.country && ","} {experience?.country}
                       </span>
->>>>>>> aa1e7fc4ca46617234dbb87ed562d2141e1841b5
                     </span>
                   </div>
                   <span className="font-popins text-xs font-semibold italic text-[#171717]">
@@ -159,42 +149,39 @@ export const Template1 = ({ resume }) => {
           layout="1-column"
           lineColor="#664b10"
         >
-          <VerticalTimelineElement
-            icon={null}
-            iconStyle={{
-              background: "#664b10",
-              color: "#664b10",
-              width: "20px",
-              height: "20px",
-            }}
-          >
-            <div className="flex items-center justify-between">
-              <span className="font-popins text-base font-semibold text-[#171717]">
-                Graphic Designer
-              </span>
-              <span className="font-popins text-xs font-semibold italic text-[#171717]">
-                June-2017
-              </span>
-            </div>
-          </VerticalTimelineElement>
-          <VerticalTimelineElement
-            icon={null}
-            iconStyle={{
-              background: "#664b10",
-              color: "#664b10",
-              width: "20px",
-              height: "20px",
-            }}
-          >
-            <div className="flex items-center justify-between">
-              <span className="font-popins text-base font-semibold text-[#171717]">
-                Graphic Designer
-              </span>
-              <span className="font-popins text-xs font-semibold italic text-[#171717]">
-                June-2017
-              </span>
-            </div>
-          </VerticalTimelineElement>
+          {resume?.education?.educationFields?.length >= 1 &&
+            resume?.education?.educationFields?.map((education, i) => {
+              return (
+                <VerticalTimelineElement
+                  key={i}
+                  icon={null}
+                  iconStyle={{
+                    background: "#664b10",
+                    color: "#664b10",
+                    width: "20px",
+                    height: "20px",
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-col space-y-2">
+                      <span className="font-popins text-base font-semibold text-[#171717]">
+                        {education?.degree}
+                      </span>
+                      <span className="font-popins font-normal text-[#171717]">
+                        {education?.instituteName}{" "}
+                        {education?.instituteLocation && ","}{" "}
+                        <span className="italic">
+                          {education?.instituteLocation}
+                        </span>
+                      </span>
+                    </div>
+                    <span className="font-popins text-xs font-semibold italic text-[#171717]">
+                      {education?.graduationMonth}-{education?.graduationYear}
+                    </span>
+                  </div>
+                </VerticalTimelineElement>
+              );
+            })}
         </VerticalTimeline>
       </div>
       <div className="pt-5">

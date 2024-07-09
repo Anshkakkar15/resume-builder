@@ -174,6 +174,10 @@ export default function Experience({ params }) {
       }}
       resumeId={params.resumeId}
       isLoading={isLoading}
+      skipButton={experienceInputs?.experienceFields?.length >= 1}
+      handleSkip={() => {
+        router.push(`/builder/experience?id=${params?.resumeId}`);
+      }}
     >
       <Form {...form}>
         <form>

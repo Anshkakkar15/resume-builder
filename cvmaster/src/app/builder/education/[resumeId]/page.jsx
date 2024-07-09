@@ -19,26 +19,37 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { backStep } from "@/lib/getBuilderPage";
-import { useParams, useRouter } from "next/navigation";
-import { useImperativeHandle, useRef } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useImperativeHandle, useRef } from "react";
 import { useForm } from "react-hook-form";
 import years, { months } from "../../../../../mock/date";
 import { educationSchema } from "@/schemas/educationSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useDispatch, useSelector } from "react-redux";
+import { educationState, updateEducation } from "@/redux/slices/EducationSlice";
+import {
+  useAddEducationDetailsMutation,
+  useGetSingleEducationQuery,
+  useUpdateExperienceDetailsMutation,
+} from "@/redux/api";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function AddEducation() {
   const router = useRouter();
   const { resumeId } = useParams();
+  const searchParams = useSearchParams();
   const formRef = useRef();
+  const dispatch = useDispatch();
+  const { toast } = useToast();
+  const eduId = searchParams.get("edu");
+  const eduIndx = searchParams.get("eduInd");
+  const userId = useSelector((state) => state.AuthSlice.userId);
+  const educationInputs = useSelector((state) => state.EducationSlice);
+  const education = useAddEducationDetailsMutation();
+  const editEducation = useUpdateExperienceDetailsMutation();
 
   const form = useForm({
-    defaultValues: {
-      instituteName: "",
-      degree: "",
-      instituteLocation: "",
-      graduationMonth: "",
-      graduationYear: "",
-    },
+    defaultValues: educationState,
     resolver: yupResolver(educationSchema),
   });
 
@@ -46,17 +57,90 @@ export default function AddEducation() {
     submit: form.handleSubmit(handleAddEducation),
   }));
 
+  const handleUpdateInputs = (field, value) => {
+    dispatch(
+      updateEducation({
+        index: eduIndx ? eduIndx : educationInputs.index,
+        value: { [field]: value },
+      }),
+    );
+  };
+
+  const getSingleEducation = useGetSingleEducationQuery(
+    `id=${eduId}&userId=${userId}&resumeId=${resumeId}`,
+    {
+      skip: !userId,
+      refetchOnMountOrArgChange: true,
+    },
+  );
+  useEffect(() => {
+    if (getSingleEducation?.data?.getSingleEducationDetails) {
+      const defaultValues = {};
+      defaultValues.instituteName =
+        getSingleEducation?.data?.getSingleEducationDetails.instituteName;
+      defaultValues.degree =
+        getSingleEducation?.data?.getSingleEducationDetails.degree;
+      defaultValues.instituteLocation =
+        getSingleEducation?.data?.getSingleEducationDetails.instituteLocation;
+      defaultValues.graduationMonth =
+        getSingleEducation?.data?.getSingleEducationDetails.graduationMonth;
+      defaultValues.graduationYear =
+        getSingleEducation?.data?.getSingleEducationDetails.graduationYear;
+      form.reset(defaultValues);
+    }
+  }, [getSingleEducation?.data?.getSingleEducationDetails]);
+
   const handleContinue = () => {
     if (formRef.current) {
       formRef.current.submit();
     }
   };
 
-  const handleAddEducation = (data) => {
-    console.log(data);
-    router.push(`/builder/education?id=${resumeId}`);
+  const handleAddEducation = async (data) => {
+    const educationObj = {
+      userId: userId,
+      resumeId: resumeId,
+      instituteName: data.instituteName,
+      degree: data.degree,
+      instituteLocation: data.instituteLocation,
+      graduationMonth: data.graduationMonth,
+      graduationYear: data.graduationYear,
+    };
+    if (eduIndx) {
+      educationObj["id"] = eduId;
+      const response = await editEducation[0](educationObj);
+      if (response?.data?.success) {
+        toast({
+          title: response?.data?.message,
+        });
+        router.push(`/builder/education?id=${resumeId}`);
+      }
+      if (editEducation[1].isError) {
+        toast({
+          variant: "destructive",
+          title: response?.error?.data?.message
+            ? response?.error?.data?.message
+            : "Error while submitting details",
+        });
+      }
+    } else {
+      const response = await education[0](educationObj);
+      if (response?.data?.success) {
+        toast({
+          title: response?.data?.message,
+        });
+        router.push(`/builder/education?id=${resumeId}`);
+      }
+      if (education[1].isError) {
+        toast({
+          variant: "destructive",
+          title: response?.error?.data?.message
+            ? response?.error?.data?.message
+            : "Error while submitting details",
+        });
+      }
+    }
   };
-
   return (
     <BuilderLayout
       heading="Tell us about your education"
@@ -67,9 +151,30 @@ export default function AddEducation() {
       }}
       handleContinue={handleContinue}
       resumeId={resumeId}
+      skipButton={educationInputs?.educationFields?.length >= 1}
+      handleSkip={() => router.push(`/builder/education?id=${resumeId}`)}
+      isLoading={education[1].isLoading || editEducation[1].isLoading}
     >
       <Form {...form} className="space-y-6">
         <form>
+          <FormField
+            control={form.control}
+            name="degree"
+            render={({ field }) => (
+              <FormItem className="mt-3">
+                <FormLabel>DEGREE</FormLabel>
+                <Input
+                  {...field}
+                  placeholder="DEGREE"
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleUpdateInputs(field.name, e.target.value);
+                  }}
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="instituteName"
@@ -78,20 +183,12 @@ export default function AddEducation() {
                 <FormLabel>INSTITUTE NAME</FormLabel>
                 <Input
                   {...field}
-                  name="instituteName"
                   placeholder="INSTITUTE NAME"
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleUpdateInputs(field.name, e.target.value);
+                  }}
                 />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="degree"
-            render={({ field }) => (
-              <FormItem className="mt-3">
-                <FormLabel>DEGREE</FormLabel>
-                <Input {...field} name="degree" placeholder="DEGREE" />
                 <FormMessage />
               </FormItem>
             )}
@@ -104,8 +201,11 @@ export default function AddEducation() {
                 <FormLabel>INSTITUTE LOCATION</FormLabel>
                 <Input
                   {...field}
-                  name="instituteLocation"
                   placeholder="INSTITUTE LOCATION"
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleUpdateInputs(field.name, e.target.value);
+                  }}
                 />
                 <FormMessage />
               </FormItem>
@@ -120,7 +220,10 @@ export default function AddEducation() {
                 render={({ field }) => (
                   <FormItem className="mt-3 w-full">
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(e) => {
+                        field.onChange(e);
+                        handleUpdateInputs(field.name, e);
+                      }}
                       defaultValue={field.value}
                     >
                       <FormControl>
@@ -146,8 +249,11 @@ export default function AddEducation() {
                 render={({ field }) => (
                   <FormItem className="mt-3 w-full">
                     <Select
-                      onValueChange={field.onChange}
                       defaultValue={field.value}
+                      onValueChange={(e) => {
+                        field.onChange(e);
+                        handleUpdateInputs(field.name, e);
+                      }}
                     >
                       <FormControl>
                         <SelectTrigger className="border-dark-blue shadow-none focus:ring-0 focus:ring-white focus-visible:shadow-none focus-visible:outline-none">

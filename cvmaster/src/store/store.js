@@ -5,6 +5,7 @@ import SummarySlice from "@/redux/slices/SummarySlice";
 import LanguageSlice from "@/redux/slices/LanguageSlice";
 import ExperienceSlice from "@/redux/slices/ExperienceSlice";
 import SkillsSlice from "@/redux/slices/SkillsSlice";
+import EducationSlice from "@/redux/slices/EducationSlice";
 import { api } from "@/redux/api";
 
 export const store = configureStore({
@@ -15,6 +16,7 @@ export const store = configureStore({
     LanguageSlice,
     ExperienceSlice,
     SkillsSlice,
+    EducationSlice,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>

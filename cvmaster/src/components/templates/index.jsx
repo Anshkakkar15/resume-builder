@@ -9,6 +9,7 @@ export const ResumeComponent = forwardRef((props, ref) => {
   const summaryInputs = useSelector((state) => state.SummarySlice);
   const languageInput = useSelector((state) => state.LanguageSlice.language);
   const experienceInput = useSelector((state) => state.ExperienceSlice);
+  const educationInputs = useSelector((state) => state.EducationSlice);
   const skillsInput = useSelector((state) => state.SkillsSlice.skills);
 
   const resumeDetails = {
@@ -16,6 +17,7 @@ export const ResumeComponent = forwardRef((props, ref) => {
     summary: summaryInputs,
     languages: languageInput,
     experience: experienceInput,
+    education: educationInputs,
     skills: skillsInput,
   };
   return (

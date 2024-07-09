@@ -19,11 +19,6 @@ const educationSchema = new mongoose.Schema({
     trim: true,
     required: [true, "Degree is required"],
   },
-  specialization: {
-    type: String,
-    trim: true,
-    required: [true, "Specialization is required"],
-  },
   instituteLocation: {
     type: String,
     trim: true,

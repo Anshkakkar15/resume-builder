@@ -12,6 +12,7 @@ import { useAuth } from "@/lib/useAuth";
 import { updateUserAuth } from "@/redux/slices/AuthSlice";
 import { updateIntroduction } from "@/redux/slices/IntroductionSlice";
 import {
+  useGetEducationListQuery,
   useGetExperienceListQuery,
   useGetIntroductionQuery,
   useGetLanguagesQuery,
@@ -26,6 +27,10 @@ import {
   updateIndex,
 } from "@/redux/slices/ExperienceSlice";
 import { setSkills } from "@/redux/slices/SkillsSlice";
+import {
+  setEducationField,
+  updateEducationIndex,
+} from "@/redux/slices/EducationSlice";
 
 export const BuilderLayout = forwardRef((props, ref) => {
   const { getAuth } = useAuth();
@@ -65,6 +70,13 @@ export const BuilderLayout = forwardRef((props, ref) => {
   );
 
   const getSkillsList = useGetSkillsQuery(
+    `userId=${userId}&resumeId=${props?.resumeId}`,
+    {
+      skip: !userId,
+    },
+  );
+
+  const getEducationList = useGetEducationListQuery(
     `userId=${userId}&resumeId=${props?.resumeId}`,
     {
       skip: !userId,
@@ -129,6 +141,13 @@ export const BuilderLayout = forwardRef((props, ref) => {
     }
   }, [getSkillsList?.isSuccess, dispatch]);
 
+  useEffect(() => {
+    dispatch(setEducationField(getEducationList?.data?.getUserEducation));
+    dispatch(
+      updateEducationIndex(getEducationList?.data?.getUserEducation?.length),
+    );
+  }, [getEducationList?.data?.getUserEducation]);
+
   return (
     <>
       <BuilderTopbar />
@@ -164,15 +183,32 @@ export const BuilderLayout = forwardRef((props, ref) => {
                 >
                   Back
                 </motion.button>
-                <motion.button
-                  initial={{ scale: 1 }}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="rounded-full border border-[#4285f4] bg-[#4285f4] px-12 py-2 text-lg text-white"
-                  onClick={props?.handleContinue}
-                >
-                  {props?.continueBtn ? props?.continueBtn : "Continue"}
-                </motion.button>
+                <div className="flex gap-3">
+                  {props?.skipButton && (
+                    <motion.button
+                      initial={{ scale: 1 }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="rounded-full border border-[#e88d67] bg-[#e88d67] px-12 py-2 text-lg text-white"
+                      onClick={props?.handleSkip}
+                    >
+                      {"Skip"}
+                    </motion.button>
+                  )}
+                  {props?.isLoading ? (
+                    <ButtonLoader />
+                  ) : (
+                    <motion.button
+                      initial={{ scale: 1 }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="rounded-full border border-[#4285f4] bg-[#4285f4] px-12 py-2 text-lg text-white"
+                      onClick={props?.handleContinue}
+                    >
+                      {props?.continueBtn ? props?.continueBtn : "Continue"}
+                    </motion.button>
+                  )}
+                </div>
               </div>
               <div>
                 <ResumeComponent ref={ref} />
@@ -189,19 +225,32 @@ export const BuilderLayout = forwardRef((props, ref) => {
             >
               Back
             </motion.button>
-            {props?.isLoading ? (
-              <ButtonLoader />
-            ) : (
-              <motion.button
-                initial={{ scale: 1 }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="rounded-full border border-[#4285f4] bg-[#4285f4] px-12 py-2 text-lg text-white"
-                onClick={props?.handleContinue}
-              >
-                {props?.continueBtn ? props?.continueBtn : "Continue"}
-              </motion.button>
-            )}
+            <div className="flex gap-3">
+              {props?.skipButton && (
+                <motion.button
+                  initial={{ scale: 1 }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="rounded-full border border-[#e88d67] bg-[#e88d67] px-12 py-2 text-lg text-white"
+                  onClick={props?.handleSkip}
+                >
+                  {"Skip"}
+                </motion.button>
+              )}
+              {props?.isLoading ? (
+                <ButtonLoader />
+              ) : (
+                <motion.button
+                  initial={{ scale: 1 }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="rounded-full border border-[#4285f4] bg-[#4285f4] px-12 py-2 text-lg text-white"
+                  onClick={props?.handleContinue}
+                >
+                  {props?.continueBtn ? props?.continueBtn : "Continue"}
+                </motion.button>
+              )}
+            </div>
           </div>
           <Footer />
         </motion.div>
