@@ -6,7 +6,6 @@ export async function POST(request) {
   await dbConnect();
   try {
     const {
-      id,
       userId,
       resumeId,
       instituteName,
@@ -14,6 +13,7 @@ export async function POST(request) {
       instituteLocation,
       graduationMonth,
       graduationYear,
+      id,
     } = await request.json();
 
     if (!userId) return sessionError();

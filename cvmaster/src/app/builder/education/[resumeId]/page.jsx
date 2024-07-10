@@ -30,7 +30,7 @@ import { educationState, updateEducation } from "@/redux/slices/EducationSlice";
 import {
   useAddEducationDetailsMutation,
   useGetSingleEducationQuery,
-  useUpdateExperienceDetailsMutation,
+  useUpdateEducationDetailsMutation,
 } from "@/redux/api";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -46,7 +46,7 @@ export default function AddEducation() {
   const userId = useSelector((state) => state.AuthSlice.userId);
   const educationInputs = useSelector((state) => state.EducationSlice);
   const education = useAddEducationDetailsMutation();
-  const editEducation = useUpdateExperienceDetailsMutation();
+  const editEducation = useUpdateEducationDetailsMutation();
 
   const form = useForm({
     defaultValues: educationState,
