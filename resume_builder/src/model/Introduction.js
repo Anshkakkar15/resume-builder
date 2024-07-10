@@ -41,7 +41,8 @@ const IntroductionSchema = new mongoose.Schema({
   },
 
   image: {
-    type: mongoose.Schema.Types.Mixed,
+    type: String,
+    // type: mongoose.Schema.Types.Mixed,
   },
 });
 

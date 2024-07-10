@@ -6,6 +6,7 @@ import {
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
 import dayjs from "dayjs";
+import Image from "next/image";
 
 export const Template1 = ({ resume }) => {
   return (
@@ -26,10 +27,12 @@ export const Template1 = ({ resume }) => {
         </div>
         <div className="max-w-36">
           {resume.introduction.imageUrl && (
-            <img
-              src={`${resume.introduction.imageUrl}`}
+            <Image
+              src={resume.introduction.imageUrl}
               alt="Avery Davis"
               className="overflow-hidden"
+              width={100}
+              height={100}
             />
           )}
         </div>

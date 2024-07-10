@@ -51,23 +51,81 @@ export default function Introduction({ params }) {
     submit: form.handleSubmit(handleAddIntroduction),
   }));
 
+  console.log(introductionInputs.image);
+
   const handleContinue = () => {
     if (formRef.current) {
       formRef.current.submit();
     }
   };
 
+  // const handleInputChange = (field) => (e) => {
+  //   if (field === "image" && e.target.files) {
+  //     function readFileAsBase64(file) {
+  //       return new Promise((resolve, reject) => {
+  //         const fileReader = new FileReader();
+  //         fileReader.onloadend = () => resolve(fileReader.result);
+  //         fileReader.onerror = reject;
+  //         fileReader.readAsDataURL(file);
+  //       });
+  //     }
+
+  //     if (field === "image" && e.target.files) {
+  //       let imageFile = e.target.files[0];
+  //       readFileAsBase64(imageFile)
+  //         .then((value) => {
+  //           dispatch(updateIntroduction({ [field]: value }));
+  //           form.setValue(field, value);
+  //         })
+  //         .catch((error) => {
+  //           console.error("Error reading file:", error);
+  //         });
+  //     }
+  //   } else {
+  //     dispatch(updateIntroduction({ [field]: value }));
+  //     // form.setValue(field, value);
+  //   }
+  //   // dispatch(updateIntroduction({ [field]: value }));
+  //   // field === "image" &&
+  //   //   dispatch(
+  //   //     updateIntroduction({
+  //   //       imageUrl:
+  //   //         e.target.files[0] && URL?.createObjectURL(e.target.files[0]),
+  //   //     }),
+  //   //   );
+  // };
+
   const handleInputChange = (field) => (e) => {
-    const value = field === "image" ? e.target.files[0] : e.target.value;
-    dispatch(updateIntroduction({ [field]: value }));
-    field === "image" &&
-      dispatch(
-        updateIntroduction({
-          imageUrl:
-            e.target.files[0] && URL?.createObjectURL(e.target.files[0]),
-        }),
-      );
-    form.setValue(field, value);
+    const { value, files } = e.target;
+
+    if (field === "image" && files.length > 0) {
+      const imageFile = files[0];
+
+      function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
+
+      readFileAsBase64(imageFile)
+        .then((base64data) => {
+          dispatch(
+            updateIntroduction({
+              image: "",
+              imageUrl: base64data,
+            }),
+          );
+        })
+        .catch((error) => {
+          console.error("Error reading file:", error);
+        });
+    } else {
+      dispatch(updateIntroduction({ [field]: value }));
+      form.setValue(field, value);
+    }
   };
 
   const handleAddIntroduction = async () => {
@@ -80,7 +138,7 @@ export default function Introduction({ params }) {
     formData.append("email", introductionInputs.email);
     formData.append("phone", introductionInputs.phone);
     formData.append("address", introductionInputs.address);
-    formData.append("image", introductionInputs.image);
+    formData.append("image", introductionInputs.imageUrl);
     const response = await addIntroduction(formData);
     if (response?.data?.message) {
       router.push(`/builder/summary/${params?.resumeId}`);

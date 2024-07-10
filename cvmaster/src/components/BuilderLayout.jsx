@@ -92,7 +92,7 @@ export const BuilderLayout = forwardRef((props, ref) => {
         email: getIntroduction?.data?.getUserIntro?.email,
         phone: getIntroduction?.data?.getUserIntro?.phone,
         address: getIntroduction?.data?.getUserIntro?.address,
-        imageUrl: `${process.env.NEXT_PUBLIC_BASE_APP_URL}${getIntroduction?.data?.getUserIntro?.image}`,
+        imageUrl: getIntroduction?.data?.getUserIntro?.image,
       }),
     );
   }, [getIntroduction?.data?.getUserIntro]);
