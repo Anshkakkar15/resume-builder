@@ -60,7 +60,7 @@ export default function Home() {
           id="templates"
           className="container mx-auto px-3 pt-6 sm:px-5 sm:pt-9 md:px-7 md:pt-11 lg:px-8 lg:pt-14 2xl:pt-16"
         >
-          <Carousel
+          {/* <Carousel
             opts={{ loop: true }}
             plugins={[
               Autoplay({
@@ -68,13 +68,15 @@ export default function Home() {
               }),
             ]}
           >
-            <CarouselContent>
-              {resumeTemplates?.length >= 1 &&
-                resumeTemplates?.map((temlates) => (
-                  <TemplateCard temlates={temlates} key={temlates?.id} />
-                ))}
-            </CarouselContent>
-          </Carousel>
+            <CarouselContent> */}
+          <div className="flex">
+            {resumeTemplates?.length >= 1 &&
+              resumeTemplates?.map((temlates) => (
+                <TemplateCard temlates={temlates} key={temlates?.id} />
+              ))}
+          </div>
+          {/* </CarouselContent>
+          </Carousel> */}
         </div>
         {/* step section */}
         <div className="container mx-auto px-3 pt-6 sm:px-5 sm:pt-9 md:pt-11 lg:px-8 lg:pt-14 xl:py-14 2xl:pt-16">

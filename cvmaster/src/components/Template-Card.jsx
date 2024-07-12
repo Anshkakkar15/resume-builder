@@ -2,18 +2,17 @@ import { useState } from "react";
 import { CarouselItem } from "./ui/carousel";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { nextStep } from "@/lib/getBuilderPage";
+import Link from "next/link";
 
 export const TemplateCard = ({ temlates }) => {
   const [isHovered, setHovered] = useState(false);
-  const router = useRouter();
-  const handleRouteToBulilder = () => {
-    router.push(`/builder/introduction/${temlates.id}`);
-    nextStep("introduction");
-  };
   return (
-    <CarouselItem
+    // <CarouselItem
+
+    //   className="md:basis-1/3.5 basis-1/2 p-2 sm:basis-1/3 md:basis-1/4"
+    // >
+    <div
       key={temlates.id}
       className="md:basis-1/3.5 basis-1/2 p-2 sm:basis-1/3 md:basis-1/4"
     >
@@ -31,13 +30,16 @@ export const TemplateCard = ({ temlates }) => {
               translateY: isHovered ? "0" : "100%",
               opacity: isHovered ? 1 : 0,
             }}
-            onClick={handleRouteToBulilder}
             className="text-nowrap rounded-xl bg-light-blue px-3 py-2 text-sm font-semibold text-dark-blue"
+            onClick={() => nextStep("introduction")}
           >
-            Use Template
+            <Link href={`/builder/introduction/${temlates.id}`}>
+              Use Template
+            </Link>
           </motion.button>
         </div>
       </div>
-    </CarouselItem>
+    </div>
+    // </CarouselItem>
   );
 };

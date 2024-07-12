@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import { ASSETS } from "../../assets";
+import Link from "next/link";
 
 export const BuilderTopbar = () => {
   const [stepsData, setStepsData] = useState([]);
@@ -17,9 +18,9 @@ export const BuilderTopbar = () => {
     <div className="w-full bg-dark-blue shadow-md">
       <div className="container mx-auto px-3 py-3 sm:px-5 sm:py-4 md:px-7 lg:px-8">
         <div className="flex flex-wrap items-center justify-center gap-5 sm:justify-between">
-          <div className="">
+          <Link href="/">
             <Image src={ASSETS.ICON} alt="icon" className="w-10" />
-          </div>
+          </Link>
           <div className="flex w-full justify-center sm:w-auto">
             <svg
               width="532"
