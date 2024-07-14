@@ -47,7 +47,8 @@ export default function SignIn() {
       });
       setToken(response?.data?.data?._id);
       setAuth(response?.data?.data);
-      router.push("/");
+      router.replace("/");
+      window.location.reload();
     }
     if (isError) {
       toast({
@@ -75,7 +76,7 @@ export default function SignIn() {
           </Link>
         </div>
         <div className="flex h-[90vh] w-full items-center justify-center">
-          <div className="grid w-full max-w-[550px] grid-cols-1 place-items-center rounded-2xl py-16 shadow-xl shadow-gray-500 md:max-w-full md:grid-cols-2 md:py-24">
+          <div className="grid w-full max-w-[550px] grid-cols-1 place-items-center rounded-2xl py-16 shadow-xl shadow-gray-500 md:max-w-full md:grid-cols-2 md:py-20">
             <div className="hidden md:block">
               <Image src={ASSETS.AUTH_IMG} alt="auth" />
             </div>

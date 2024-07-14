@@ -3,6 +3,7 @@ import { AUTH_ID_KEY } from "./constants";
 
 export function middleware(request) {
   let token = request.cookies.get(AUTH_ID_KEY);
+  console.log(token);
   const url = request.nextUrl;
   if (
     token &&

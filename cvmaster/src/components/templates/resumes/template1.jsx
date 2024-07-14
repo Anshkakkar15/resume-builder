@@ -16,7 +16,7 @@ export const Template1 = ({ resume }) => {
           <h1 className="font-popins text-3xl font-bold italic text-[#664b10]">
             {resume.introduction.firstName || resume.introduction.lastName
               ? resume.introduction.firstName
-              : "Avery Davis"}{" "}
+              : "Avery Davis"}
             {resume.introduction.lastName}
           </h1>
           <h2 className="font-popins text-xl font-semibold italic text-[#171717]">
@@ -29,7 +29,7 @@ export const Template1 = ({ resume }) => {
           {resume.introduction.imageUrl && (
             <Image
               src={resume.introduction.imageUrl}
-              alt="Avery Davis"
+              alt={resume.introduction.firstName}
               className="overflow-hidden"
               width={100}
               height={100}

@@ -173,7 +173,7 @@ export const BuilderLayout = forwardRef((props, ref) => {
                 </p>
                 {props.children}
               </div>
-              <div className="flex w-full justify-between pb-10 lg:hidden">
+              <div className="flex w-full items-center justify-between pb-10 lg:hidden">
                 <motion.button
                   initial={{ scale: 1 }}
                   whileHover={{ scale: 1.1 }}
@@ -183,7 +183,7 @@ export const BuilderLayout = forwardRef((props, ref) => {
                 >
                   Back
                 </motion.button>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
                   {props?.skipButton && (
                     <motion.button
                       initial={{ scale: 1 }}

@@ -98,8 +98,7 @@ export default function Language({ params }) {
   return (
     <BuilderLayout
       heading="Let's add your preferred languages"
-      description="Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Doloremque dolorem dignissimos rerum"
+      description="Add languages you are comfortable speaking and writing in"
       handleBack={() => {
         router?.push(`/builder/summary/${params?.resumeId}`);
         backStep("language");
